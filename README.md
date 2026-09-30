@@ -1,3 +1,7 @@
+<img width="2172" height="724" alt="pagepilot" src="https://github.com/user-attachments/assets/363d4307-1607-4946-bead-c64530d0b197" />
+
+
+
 # PagePilot: Autonomous AI Browser Automation Framework
 
 The open source Python engine for autonomous web navigation, intelligent data extraction, form filling, and modern browser automation powered by Large Language Models and the Chrome DevTools Protocol.

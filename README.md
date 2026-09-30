@@ -1,109 +1,130 @@
-# PagePilot
+# PagePilot: Autonomous AI Browser Automation Framework
 
-Autonomous browser automation agent powered by large language models and modern browser protocols.
+The open source Python engine for autonomous web navigation, intelligent data extraction, form filling, and modern browser automation powered by Large Language Models and the Chrome DevTools Protocol.
 
-PagePilot enables intelligent agents to navigate websites, inspect DOM trees, interact with page elements, submit forms, extract data, and complete multi step web workflows autonomously.
-
----
-
-## Overview
-
-PagePilot connects language models directly to browser instances via the Chrome DevTools Protocol. The engine combines vision capabilities, DOM element tree extraction, and action execution loops to perform complex tasks on the web.
-
-### Key Capabilities
-
-* Automated Web Navigation: Search, click, type, scroll, and handle dynamic web applications.
-* Multi Model Support: Works with PagePilot models, Google Gemini, OpenAI GPT, Anthropic Claude, and local Ollama models.
-* Vision and DOM Processing: Interprets visual page state and interactive DOM accessibility elements.
-* Structured Output: Extract typed information validated with Pydantic models.
-* Extensible Tooling: Register custom Python functions and tools that agents can execute during tasks.
+PagePilot transforms language models into autonomous web agents that can control Chromium browsers, parse interactive DOM trees, interact with complex dynamic web applications, and execute multi step workflows from plain language prompts.
 
 ---
 
-## Quickstart
+## Why PagePilot?
 
-### 1. Environment Setup
+Traditional web automation tools like Playwright, Selenium, and Puppeteer require manually maintaining fragile CSS selectors, XPath strings, and rigid wait timeouts. Whenever a website updates its layout, classic automation scripts break.
 
-PagePilot requires Python 3.11 or newer. Set up your virtual environment using uv or standard python tools:
+PagePilot provides a self healing alternative:
+* It reads the interactive accessibility tree and visual screen state.
+* It plans and executes actions dynamically based on high level goals.
+* It adapts when UI elements shift or change layout.
+* It batches multiple actions per step to minimize latency and token costs.
+
+| Feature | Legacy Scripting (Playwright / Selenium) | PagePilot AI Automation |
+| :--- | :--- | :--- |
+| Selector Maintenance | Manual CSS and XPath strings (breaks easily) | Zero manual selectors, autonomous DOM understanding |
+| Workflow Definition | Rigid procedural code | Plain English task prompts |
+| Form Filling | Explicit element click and type commands | Autonomous multi action batching in a single turn |
+| Dynamic Layouts | Fails on A/B tests and redesigns | Self healing reasoning that adapts to UI updates |
+| Data Extraction | Manual regex and HTML parsing | Typed Pydantic v2 structured schemas |
+| Supported Models | None (manual code only) | Gemini, OpenAI, Claude, and local Ollama models |
+
+---
+
+## Core Capabilities
+
+* Autonomous Web Navigation: Search, click, type, scroll, handle pagination, and manage browser tabs.
+* Multi Action Execution: Batches sequential interactions (such as multi field form submission) into a single step for low latency and token efficiency.
+* Token Cost Optimization: Strips non interactive styling and script tags, generating lightweight accessibility trees rather than raw HTML dumps.
+* Vision and Layout Awareness: Supports screenshot analysis for visual validation alongside DOM element inspection.
+* Type Safe Extraction: Validates extracted data into strict Pydantic schemas for reliable API pipelines.
+* Local First Automation: Compatible with local Ollama models (Qwen, Llama, Mistral) for private, zero cost offline automation.
+
+---
+
+## Installation
+
+PagePilot requires Python 3.11 or newer. We recommend using `uv` for fast dependency management:
 
 ```bash
 uv venv --python 3.12
 source .venv/bin/activate
-uv sync
+uv pip install -e .
 ```
 
-On Windows systems, activate your environment with:
+On Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\activate
+uv pip install -e .
 ```
 
-### 2. Configuration
+---
 
-Create your `.env` configuration file from the provided example:
+## Configuration
+
+Copy the example environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Add your API credentials:
+Set your preferred provider API key:
 
 ```bash
-PAGEPILOT_API_KEY=your_api_key_here
-# Optional provider keys:
-# OPENAI_API_KEY=your_openai_key
-# GOOGLE_API_KEY=your_gemini_key
-# ANTHROPIC_API_KEY=your_anthropic_key
+PAGEPILOT_API_KEY=your_key_here
+# Optional alternatives:
+# OPENAI_API_KEY=your_key_here
+# GOOGLE_API_KEY=your_key_here
+# ANTHROPIC_API_KEY=your_key_here
 ```
 
 ---
 
-## Usage Examples
+## Quickstart Guide
 
-### Basic Agent Execution
+### 1. Basic Autonomous Task
 
 ```python
 import asyncio
 from dotenv import load_dotenv
-from pagepilot import Agent, ChatPagePilot
+from pagepilot import Agent, ChatBrowserUse
 
 load_dotenv()
 
 async def main():
-    llm = ChatPagePilot()
     agent = Agent(
-        task="Navigate to github.com/trending and extract the top trending repositories",
-        llm=llm
+        task="Go to github.com/trending, find the top 3 trending repositories, and extract their stars and descriptions.",
+        llm=ChatBrowserUse()
     )
     history = await agent.run(max_steps=25)
-    print("Execution Result:")
+    print("Result:")
     print(history.final_result())
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Running with Alternative Models
+### 2. Multi Model Support (Gemini, GPT, Claude, Ollama)
 
 ```python
 import asyncio
 from dotenv import load_dotenv
-from pagepilot import Agent, ChatGoogle, ChatOpenAI, ChatAnthropic
+from pagepilot import Agent, ChatGoogle, ChatOpenAI, ChatAnthropic, ChatOllama
 
 load_dotenv()
 
 async def main():
-    # Using Google Gemini
+    # Google Gemini
     llm = ChatGoogle(model="gemini-2.5-flash")
     
-    # Or using OpenAI GPT
+    # Or OpenAI GPT
     # llm = ChatOpenAI(model="gpt-4o")
     
-    # Or using Anthropic Claude
+    # Or Anthropic Claude
     # llm = ChatAnthropic(model="claude-3-7-sonnet-20250219")
+    
+    # Or Local Ollama
+    # llm = ChatOllama(model="qwen2.5:latest")
 
     agent = Agent(
-        task="Find recent news about artificial intelligence research",
+        task="Search arxiv.org for the latest research papers on autonomous AI agents and summarize their findings.",
         llm=llm
     )
     history = await agent.run()
@@ -113,29 +134,54 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Custom Tools Integration
+### 3. Structured Data Extraction with Pydantic
 
-You can extend agent capabilities with custom Python functions:
+```python
+import asyncio
+from pydantic import BaseModel, Field
+from pagepilot import Agent, ChatGoogle
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class ProductInfo(BaseModel):
+    title: str = Field(description="Name of the product")
+    price: str = Field(description="Current listed price")
+    rating: str = Field(description="Customer review rating")
+
+async def main():
+    agent = Agent(
+        task="Extract pricing and rating details for the top recommended laptop on the store page.",
+        llm=ChatGoogle(model="gemini-2.5-flash"),
+        output_model_schema=ProductInfo
+    )
+    history = await agent.run()
+    print("Structured Output:", history.structured_output)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### 4. Extending Agents with Custom Tools
 
 ```python
 import asyncio
 from datetime import datetime, timezone
-from pagepilot import Agent, ActionResult, ChatPagePilot, Tools
+from pagepilot import Agent, ActionResult, Tools, ChatGoogle
 from dotenv import load_dotenv
 
 load_dotenv()
 
 tools = Tools()
 
-@tools.action(description="Retrieve current UTC timestamp")
-def get_current_time() -> ActionResult:
-    now_str = datetime.now(timezone.utc).isoformat()
-    return ActionResult(extracted_content=now_str)
+@tools.action(description="Get the current UTC timestamp")
+def get_timestamp() -> ActionResult:
+    return ActionResult(extracted_content=datetime.now(timezone.utc).isoformat())
 
 async def main():
     agent = Agent(
-        task="Check current time and summarize top tech headlines",
-        llm=ChatPagePilot(),
+        task="Check current time using get_timestamp and search for today's top tech news.",
+        llm=ChatGoogle(model="gemini-2.5-flash"),
         tools=tools
     )
     history = await agent.run()
@@ -149,32 +195,28 @@ if __name__ == "__main__":
 
 ## Command Line Interface
 
-PagePilot includes CLI tools for diagnostics, automation workflows, and headless runs:
+PagePilot includes CLI tools for quick verification, diagnostics, and headless execution:
 
 ```powershell
-# Run system and browser diagnostic check
+# Run environment and browser diagnostic check
 python -m pagepilot.cli --doctor
 
-# View all CLI commands
+# View CLI commands
 python -m pagepilot.cli --help
 ```
 
 ---
 
-## Architecture
+## Common Use Cases
 
-PagePilot follows an event driven architecture:
-
-* Agent Orchestration (`Agent`): Manages the step loop, memory compaction, and decision execution.
-* Browser Controller (`BrowserSession`): Handles browser lifecycle, CDP connection, tabs, and events.
-* DOM Service (`DomService`): Serializes interactive elements, computes bounding boxes, and filters accessibility trees.
-* Action Registry (`Tools`): Maps model decisions to low level browser actions like click, type, and scroll.
+* Automated Web Scraping: Extract data from single page applications, infinite scroll feeds, and login gated portals.
+* QA and Synthetic Testing: Test critical user journeys (signup, checkout, onboarding) without writing brittle test scripts.
+* Business Process Automation (RPA): Complete repetitive back office web tasks across legacy ERP and CRM dashboards.
+* Competitive Intelligence: Track dynamic pricing, inventory levels, and product availability automatically.
 
 ---
 
-## Running Tests
-
-Execute the automated test suite using pytest:
+## Running the Test Suite
 
 ```powershell
 python -m pytest tests/ci

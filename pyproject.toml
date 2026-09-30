@@ -1,13 +1,31 @@
 [project]
 name = "pagepilot"
-description = "Autonomous browser automation agent engine"
+description = "Autonomous AI browser automation framework and web agent engine for Python"
 version = "0.13.10"
 readme = "README.md"
 requires-python = ">=3.11,<4.0"
+keywords = [
+    "browser automation",
+    "web automation",
+    "ai browser agent",
+    "autonomous web agent",
+    "web scraping",
+    "rpa",
+    "playwright alternative",
+    "selenium alternative",
+    "llm browser driver",
+    "headless browser ai",
+    "browser agent python"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
     "aiohttp==3.14.3",

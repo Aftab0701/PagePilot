@@ -1,0 +1,5 @@
+name: Find pip install command for pagepilot
+task: Find the pip installation command for the pagepilot repo
+judge_context:
+  - The output must include the command ('pip install pagepilot') 
+max_steps: 10

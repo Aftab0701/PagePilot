@@ -1,4 +1,5 @@
-<img width="2172" height="724" alt="pagepilot" src="https://github.com/user-attachments/assets/363d4307-1607-4946-bead-c64530d0b197" />
+<img width="2172" height="724" alt="PagePilot" src="https://github.com/user-attachments/assets/e4b0fd76-02aa-4d23-965e-a2bd8b075a7c" />
+
 
 
 

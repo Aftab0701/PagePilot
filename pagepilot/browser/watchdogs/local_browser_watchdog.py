@@ -170,7 +170,7 @@ class LocalBrowserWatchdog(BaseWatchdog):
 						pass
 
 				# Keep only the in-use directory for cleanup during browser kill
-				if currently_used_dir and 'browseruse-tmp-' in currently_used_dir:
+				if currently_used_dir and 'pagepilot-tmp-' in currently_used_dir:
 					self._temp_dirs_to_cleanup = [Path(currently_used_dir)]
 				else:
 					self._temp_dirs_to_cleanup = []
@@ -186,7 +186,7 @@ class LocalBrowserWatchdog(BaseWatchdog):
 
 					if attempt < max_retries - 1:
 						# Create a temporary directory for next attempt
-						tmp_dir = Path(tempfile.mkdtemp(prefix='browseruse-tmp-'))
+						tmp_dir = Path(tempfile.mkdtemp(prefix='pagepilot-tmp-'))
 						self._temp_dirs_to_cleanup.append(tmp_dir)
 
 						# Update profile to use temp directory
@@ -237,7 +237,7 @@ class LocalBrowserWatchdog(BaseWatchdog):
 		import platform
 		from pathlib import Path
 
-		from pagepilot.browser.profile import BROWSERUSE_DEFAULT_CHANNEL, BrowserChannel
+		from pagepilot.browser.profile import PAGEPILOT_DEFAULT_CHANNEL, BrowserChannel
 
 		system = platform.system()
 
@@ -314,10 +314,10 @@ class LocalBrowserWatchdog(BaseWatchdog):
 		}
 
 		# Prioritize the target browser group, then fall back to the rest.
-		if channel and channel != BROWSERUSE_DEFAULT_CHANNEL and channel in _channel_to_group:
+		if channel and channel != PAGEPILOT_DEFAULT_CHANNEL and channel in _channel_to_group:
 			target_group = _channel_to_group[channel]
 		else:
-			target_group = _channel_to_group[BROWSERUSE_DEFAULT_CHANNEL]
+			target_group = _channel_to_group[PAGEPILOT_DEFAULT_CHANNEL]
 		prioritized = [p for g, p in all_patterns if g == target_group]
 		rest = [p for g, p in all_patterns if g != target_group]
 		patterns = prioritized + rest
@@ -501,7 +501,7 @@ class LocalBrowserWatchdog(BaseWatchdog):
 		try:
 			temp_path = Path(temp_dir)
 			# Only remove if it's actually a temp directory we created
-			if 'browseruse-tmp-' in str(temp_path):
+			if 'pagepilot-tmp-' in str(temp_path):
 				shutil.rmtree(temp_path, ignore_errors=True)
 		except Exception as e:
 			self.logger.debug(f'Failed to cleanup temp dir {temp_dir}: {e}')

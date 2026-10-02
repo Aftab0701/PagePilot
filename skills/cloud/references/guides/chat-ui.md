@@ -1,6 +1,6 @@
 # Guide: Building a Chat Interface
 
-Build a conversational UI where users chat with a Browser Use agent and watch it work in real-time.
+Build a conversational UI where users chat with a PagePilot agent and watch it work in real-time.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)

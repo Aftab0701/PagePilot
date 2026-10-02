@@ -48,7 +48,7 @@ Your agent already has tools (search, code execution, file I/O, etc.) and its ow
 uv pip install 'pagepilot[cli]'
 ```
 
-For Browser Use Cloud, authenticate once and start a named remote browser:
+For PagePilot Cloud, authenticate once and start a named remote browser:
 
 ```bash
 pagepilot auth login

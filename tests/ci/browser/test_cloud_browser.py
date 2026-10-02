@@ -21,7 +21,7 @@ from pagepilot.sync.auth import CloudAuthConfig
 def temp_config_dir(monkeypatch):
 	"""Create temporary config directory."""
 	with tempfile.TemporaryDirectory() as tmpdir:
-		temp_dir = Path(tmpdir) / '.config' / 'browseruse'
+		temp_dir = Path(tmpdir) / '.config' / 'pagepilot'
 		temp_dir.mkdir(parents=True, exist_ok=True)
 
 		# Use monkeypatch to set the environment variable

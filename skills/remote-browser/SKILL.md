@@ -1,12 +1,12 @@
 ---
 name: remote-browser
-description: Controls an isolated Browser Use Cloud browser from a sandboxed machine with the current Browser Use CLI.
+description: Controls an isolated PagePilot Cloud browser from a sandboxed machine with the current PagePilot CLI.
 allowed-tools: Bash(pagepilot:*)
 ---
 
 # Remote Browser
 
-Use this skill when an agent runs on a machine without a usable local Chrome and needs an isolated browser. The current Browser Use CLI runs Python from stdin. Do not use the removed `open`, `state`, `click`, `input`, `tab`, `cloud connect`, or `--connect` commands.
+Use this skill when an agent runs on a machine without a usable local Chrome and needs an isolated browser. The current PagePilot CLI runs Python from stdin. Do not use the removed `open`, `state`, `click`, `input`, `tab`, `cloud connect`, or `--connect` commands.
 
 ## Check the CLI
 
@@ -15,7 +15,7 @@ pagepilot --doctor
 pagepilot skill show
 ```
 
-If setup fails, follow the current [Browser Use skill](../pagepilot/SKILL.md).
+If setup fails, follow the current [PagePilot skill](../pagepilot/SKILL.md).
 
 ## Start an isolated browser
 
@@ -43,7 +43,7 @@ print(page_info())
 PY
 ```
 
-Each remote daemon is a separate Browser Use Cloud browser. Use a different name for each parallel task. Remote browsers can bill until they stop or time out.
+Each remote daemon is a separate PagePilot Cloud browser. Use a different name for each parallel task. Remote browsers can bill until they stop or time out.
 
 ## Inspect and interact
 

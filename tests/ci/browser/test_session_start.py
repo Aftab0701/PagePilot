@@ -15,7 +15,7 @@ import logging
 import pytest
 
 from pagepilot.browser.profile import (
-	BROWSERUSE_DEFAULT_CHANNEL,
+	PAGEPILOT_DEFAULT_CHANNEL,
 	BrowserChannel,
 	BrowserProfile,
 )
@@ -102,7 +102,7 @@ class TestBrowserSessionStart:
 			browser_profile=BrowserProfile(
 				headless=True,
 				user_data_dir=CONFIG.PAGEPILOT_DEFAULT_USER_DATA_DIR,
-				channel=BROWSERUSE_DEFAULT_CHANNEL,  # chromium
+				channel=PAGEPILOT_DEFAULT_CHANNEL,  # chromium
 				keep_alive=False,
 			),
 		)
@@ -385,7 +385,7 @@ class TestBrowserSessionEventSystem:
 	# 		browser_sessions.append(
 	# 			BrowserSession(
 	# 				browser_profile=BrowserProfile(
-	# 					user_data_dir=Path(tempfile.mkdtemp(prefix=f'browseruse-tmp-{i}')),
+	# 					user_data_dir=Path(tempfile.mkdtemp(prefix=f'pagepilot-tmp-{i}')),
 	# 					headless=True,
 	# 					keep_alive=True,
 	# 				),
@@ -405,7 +405,7 @@ class TestBrowserSessionEventSystem:
 	# 		browser_sessions.append(
 	# 			BrowserSession(
 	# 				browser_profile=BrowserProfile(
-	# 					user_data_dir=Path(tempfile.mkdtemp(prefix=f'browseruse-tmp-{i}')),
+	# 					user_data_dir=Path(tempfile.mkdtemp(prefix=f'pagepilot-tmp-{i}')),
 	# 					headless=True,
 	# 					keep_alive=False,
 	# 				),

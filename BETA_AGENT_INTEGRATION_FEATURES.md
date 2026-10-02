@@ -11,10 +11,10 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
      `agent.run_task` request/response protocol.
    - Follow-up tasks reuse the returned SDK `agent_id`, `session_id`, and `browser_id`
      through `agent.run`, so the Python-facing interface can keep one Rust-owned session.
-   - Browser-use-style options are mapped into SDK params, including model/provider,
+   - PagePilot-style options are mapped into SDK params, including model/provider,
      CDP URL/headers, viewport, user agent, storage state, downloads path, structured
      output schema, max steps, vision, cost calculation, and action limits.
-   - The returned normalized event history is reconstructed into Browser Use-compatible
+   - The returned normalized event history is reconstructed into PagePilot-compatible
      `AgentHistoryList`, callbacks, usage, telemetry, Laminar replay, downloads, and
      final result handling.
    - The SDK stdout reader accepts large JSON-RPC response lines by reading stdout in
@@ -28,7 +28,7 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
      task/follow-up input into `RuntimeHandle::run_agent` as `initial_input`, so SDK
      `agent.run_task` enters the runtime-owned loop with `agent.input.accepted` and
      `agent.input.consumed` events instead of stalling after browser creation.
-   - Browser-use `llm_timeout`/SDK `llm.timeout` now reaches the terminal Rust
+   - PagePilot `llm_timeout`/SDK `llm.timeout` now reaches the terminal Rust
      model stream path as both a response-open timeout and a stream-idle timeout,
      so a provider request that never returns response headers, or a stream that
      opens and then sends no SSE bytes, becomes a retryable transport error instead
@@ -95,19 +95,19 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
     returns the completed navigation/page result in that same call instead of
     forcing a separate observe/status/recover turn.
   - Terminal remote-CDP attach now reuses an existing ordinary blank page target
-    before creating a new `about:blank` tab. Browser Use Cloud sessions therefore
+    before creating a new `about:blank` tab. PagePilot Cloud sessions therefore
     begin with one stable controlled tab instead of splitting Python setup and
     Rust execution across separate blank targets.
   - Eval payloads preserve Rust/pagepilot usage fields and add dashboard
     aliases (`input_tokens`, `output_tokens`, cached/cache-creation tokens, and
     `cost_usd`) before saving. This keeps cost/token displays working for Rust
     histories without changing the canonical pagepilot usage structure.
-   - Browser-use Rust CDP initial navigation now waits for a concrete
+   - PagePilot Rust CDP initial navigation now waits for a concrete
      post-navigation browser state summary and passes the observed current
      URL/title into the Rust task context. Start-URL tasks should begin by
      inspecting or extracting from the already-loaded page instead of spending
      early turns on repeated navigation/status recovery.
-   - Browser-use Rust direct CDP pre-navigation now only records an initial
+   - PagePilot Rust direct CDP pre-navigation now only records an initial
      navigation as completed when the observed browser state matches the
      requested URL. If the Cloud Browser remains on `about:blank` or another
      mismatched target, the original navigation stays in the Rust task context
@@ -136,26 +136,26 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
      preserving final output, success state, errors, usage, files, and recent
      events, so a completed run cannot lose its final answer because the Python
      wrapper hits its newline-delimited frame limit.
-   - Browser-use Rust SDK runs now prefer live `agent.event` notifications when
+   - PagePilot Rust SDK runs now prefer live `agent.event` notifications when
      the final SDK response is missing, truncated, or smaller than the already
      observed stream. If a run is cancelled or the final transport fails after
      `session.done`, Python reconstructs `AgentHistoryList`, usage, and final
      output from the notification stream instead of returning an empty result.
-   - Browser-use Rust SDK notification recovery now accepts both top-level
+   - PagePilot Rust SDK notification recovery now accepts both top-level
      `event_type` records and nested SDK event envelopes. Runs that visibly emit
      `session.done` in GitHub runner progress logs therefore reconstruct the
      final answer even if the final JSON-RPC history response is empty or
      compacted differently.
-   - Browser-use Rust SDK notification recovery now normalizes both
+   - PagePilot Rust SDK notification recovery now normalizes both
      `agent.event` and `agent.projected_event` notifications into the retained
      event history. Runs whose progress logs show projected `session.done` or
      `agent.completed` events therefore no longer fall back to
      "Rust terminal session did not produce a final result."
-   - Browser-use Rust SDK history reconstruction now prefers retained live
+   - PagePilot Rust SDK history reconstruction now prefers retained live
      notifications when the final JSON-RPC response history is present but lacks
      a final result. Stale response-side compaction errors no longer override a
      `session.done` event that Python already observed from the stream.
-   - Browser-use Rust SDK billing reconstruction now falls back to the SDK
+   - PagePilot Rust SDK billing reconstruction now falls back to the SDK
      response's aggregate `history.usage` when compacted histories omit usage
      events. This keeps dashboard usage nonzero even when the event payload is
      compacted before it reaches Python.
@@ -172,7 +172,7 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
      discover candidate pages without spending browser-navigation turns on search
      engine result pages.
    - Terminal SDK histories now return child-agent events separately from parent
-     events and expose a combined `usage_events` stream. Browser-use prices and
+     events and expose a combined `usage_events` stream. PagePilot prices and
      traces against that combined stream, so sub-agent model calls contribute to
      run token/cost totals without letting child `session.done` events override
      the parent final answer.
@@ -182,17 +182,17 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
      replace the new server protocol while the normal Python `pagepilot.Agent`
      remains unchanged.
    - Terminal SDK browser requests now preserve and forward additional
-     Browser Use-style browser settings: proxy country, local profile label,
+     PagePilot-style browser settings: proxy country, local profile label,
      allowed/blocked domains, window size, and state directory. For cloud
      browser runs, proxy country is passed to `browser remote start`, so Rust
-     SDK sessions can use Browser Use Cloud browser proxies through the same
+     SDK sessions can use PagePilot Cloud browser proxies through the same
      Python-facing `browser_profile`/`browser_session` options.
-   - Browser-use now deduplicates SDK response/projected events before
+   - PagePilot now deduplicates SDK response/projected events before
      reconstructing history and usage. Duplicate `token_count` and
      `session.done` records no longer inflate eval history, dashboard usage, or
      telemetry payloads when the terminal server returns both live and projected
      event streams.
-   - Browser-use no longer sends a Rust SDK `tool_allowlist` override. The
+   - PagePilot no longer sends a Rust SDK `tool_allowlist` override. The
      terminal SDK server now owns its tool registry for `pagepilot.beta.Agent`
      runs, so local search, web/search helpers, and v2 sub-agent controls are
      available in evals when the Rust core registers them.
@@ -306,7 +306,7 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
 - real_v8 5-task eval smoke `kh721gr6v248emmdw9kn4mf645882qdk` on
   pagepilot `ad74b9f23da5c3ec1773b57dce856df9467777c5` and terminal
   `b59372cc03b574e1bb82d9ad814ebb6c2d79bd1c`: 5/5 completed, scores
-  80/90/100/100/100 with Agent SDK judge and Browser Use Cloud CDP browser.
+  80/90/100/100/100 with Agent SDK judge and PagePilot Cloud CDP browser.
 - real_v8 50-task eval `kh7749jfyd5x54n5wzt4cqezmh883tgp` on the same
   pagepilot SHA and terminal `b59372cc03b574e1bb82d9ad814ebb6c2d79bd1c`
   completed all 50 task rows but scored below target; repeated low-output
@@ -320,16 +320,16 @@ This branch keeps the Python `Agent` unchanged unless callers explicitly import
   syntax errors that motivated terminal `aa3f3ea`.
 - final real_v8 50-task eval `kh7br0crtahkq408f9dw41z901883qy5` was
   dispatched on pagepilot `7bcf9754f103a1bb6c2e6d031940a162bb4adfbe` and
-  terminal `aa3f3ea78d45564ea0e5f5443e4f13145e5ca9a5` with Browser Use Cloud
+  terminal `aa3f3ea78d45564ea0e5f5443e4f13145e5ca9a5` with PagePilot Cloud
   CDP browser and Agent SDK judge. It completed all 50 rows with Agent SDK
   judging, averaged 78.5, saved partial final responses for the six timeboxed
   zero-score rows, and is tagged as `eval/kh7br-real-v8-50-78p50` in both
   pagepilot and terminal.
 - real_v8 50-task eval `kh7880wm0ffgsyqkwzfwn9hc7s882mff` was dispatched on
   pagepilot `5c40474473a61651f25cd2d084aa1fc278c5c714` and terminal
-  `640e052ca5f8e8654069a414814ac2f061861ce2` with Browser Use Cloud CDP
+  `640e052ca5f8e8654069a414814ac2f061861ce2` with PagePilot Cloud CDP
   browser, no `--proxyless` flag, a 30 minute task/agent timebox, and Agent SDK
-  judge. GitHub runner logs show `--browser pagepilot-cloud`, Browser Use
+  judge. GitHub runner logs show `--browser pagepilot-cloud`, PagePilot
   Cloud session creation, and Rust `browser_mode=remote-cdp`. When inspected,
   49 scored rows averaged 76.29 while one placeholder row was rerunning; low
   rows mostly had partial final responses after 30 minute cancellations rather

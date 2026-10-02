@@ -1,13 +1,13 @@
-# Browser Use v2 agent backend (recommended for QA)
+# PagePilot v2 agent backend (recommended for QA)
 
-Run the QA test as an autonomous **Browser Use cloud agent** instead of driving browser-harness
+Run the QA test as an autonomous **PagePilot cloud agent** instead of driving browser-harness
 step by step. It's purpose-built for QA: a **judge** evaluates pass/fail against expected
 behavior, and **structured output** forces the 1–5 score. It runs server-side, parallelizes, and
 returns step-by-step evidence (screenshots + actions).
 
-**Cost / credits:** the v2 agent spends Browser Use credits — about **$0.01 per task + ~$0.006 per
+**Cost / credits:** the v2 agent spends PagePilot credits — about **$0.01 per task + ~$0.006 per
 step (LLM) + $0.02/hr browser**, drawn from the account's monthly allowance. (The Claude-subagent
-backend in `methodology.md` spends no Browser Use *task* credits.) Recommend v2 for real QA; fall
+backend in `methodology.md` spends no PagePilot *task* credits.) Recommend v2 for real QA; fall
 back to the Claude subagent to avoid credits.
 
 > Note: the docs label the v2 API "legacy" and steer new projects to v3 — but the **`judge` +
@@ -27,7 +27,7 @@ The v2 API authenticates with `PAGEPILOT_API_KEY` — the same key `methodology.
 (browser-harness's `.env`, the process env, or self-signup). The cleanest way to use
 *browser-harness's stored key* is to run the calls **inside a `browser-harness` heredoc**, where
 the key is already loaded into `os.environ` — no separate plumbing, no re-exporting. (Plain `curl`
-with `$PAGEPILOT_API_KEY` also works if it's exported. The v2 task itself runs on a Browser Use
+with `$PAGEPILOT_API_KEY` also works if it's exported. The v2 task itself runs on a PagePilot
 cloud browser, so no local Chrome is needed for the test — browser-harness here is just the key
 store + HTTP runtime.)
 
@@ -159,14 +159,14 @@ What worked:
 Issues:
 - [tag] <from `issues` / judgement; empty if none>
 Evidence: <key steps[].screenshotUrl links>
-Cost: $X.XX (Browser Use v2 agent, <n> steps)
+Cost: $X.XX (PagePilot v2 agent, <n> steps)
 ```
 
 ## Fan out: many flows in parallel
 
 The whole point of v2 subagents is parallel coverage. To test several flows at once, **create all
 the tasks first** (each `POST /tasks` returns immediately with an `id`), then **poll them all** —
-they run concurrently in Browser Use cloud:
+they run concurrently in PagePilot cloud:
 
 ```python
 flows = [

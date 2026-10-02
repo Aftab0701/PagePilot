@@ -45,7 +45,7 @@ def setup_test_environment():
 	"""
 
 	# Create a temporary directory for test config (but not for extensions)
-	config_dir = tempfile.mkdtemp(prefix='browseruse_tests_')
+	config_dir = tempfile.mkdtemp(prefix='pagepilot_tests_')
 
 	original_env = {}
 	test_env_vars = {
@@ -54,8 +54,8 @@ def setup_test_environment():
 		'PAGEPILOT_CLOUD_SYNC': 'true',
 		'PAGEPILOT_CLOUD_API_URL': 'http://placeholder-will-be-replaced-by-specific-test-fixtures',
 		'PAGEPILOT_CLOUD_UI_URL': 'http://placeholder-will-be-replaced-by-specific-test-fixtures',
-		# Don't set PAGEPILOT_CONFIG_DIR anymore - let it use the default ~/.config/browseruse
-		# This way extensions will be cached in ~/.config/browseruse/extensions
+		# Don't set PAGEPILOT_CONFIG_DIR anymore - let it use the default ~/.config/pagepilot
+		# This way extensions will be cached in ~/.config/pagepilot/extensions
 	}
 
 	for key, value in test_env_vars.items():

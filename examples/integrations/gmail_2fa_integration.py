@@ -12,7 +12,7 @@ Features:
 Setup:
 1. Enable Gmail API in Google Cloud Console
 2. Create OAuth 2.0 credentials and download JSON
-3. Save credentials as ~/.config/browseruse/gmail_credentials.json
+3. Save credentials as ~/.config/pagepilot/gmail_credentials.json
 4. Run this example - it will guide you through OAuth setup if needed
 """
 

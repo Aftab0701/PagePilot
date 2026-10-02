@@ -1,40 +1,40 @@
 # syntax=docker/dockerfile:1
 # check=skip=SecretsUsedInArgOrEnv
 
-# This is the Dockerfile for browser-use, it bundles the following dependencies:
-#     python3, pip, playwright, chromium, browser-use and its dependencies.
+# This is the Dockerfile for pagepilot, it bundles the following dependencies:
+#     python3, pip, playwright, chromium, pagepilot and its dependencies.
 # Usage:
-#     git clone https://github.com/browser-use/browser-use.git && cd browser-use
-#     docker build . -t browseruse --no-cache
-#     docker run -v "$PWD/data":/data browseruse
-#     docker run -v "$PWD/data":/data browseruse --version
+#     git clone https://github.com/pagepilot/pagepilot.git && cd pagepilot
+#     docker build . -t pagepilot --no-cache
+#     docker run -v "$PWD/data":/data pagepilot
+#     docker run -v "$PWD/data":/data pagepilot --version
 # Multi-arch build:
 #     docker buildx create --use
-#     docker buildx build . --platform=linux/amd64,linux/arm64--push -t browseruse/browseruse:some-tag
+#     docker buildx build . --platform=linux/amd64,linux/arm64--push -t pagepilot/pagepilot:some-tag
 #
-# Read more: https://docs.browser-use.com
+# Read more: https://docs.pagepilot.com
 
 #########################################################################################
 
 
 FROM python:3.12-slim
 
-LABEL name="browseruse" \
-    maintainer="Nick Sweeting <dockerfile@browser-use.com>" \
+LABEL name="pagepilot" \
+    maintainer="PagePilot Team <dockerfile@pagepilot.com>" \
     description="Make websites accessible for AI agents. Automate tasks online with ease." \
-    homepage="https://github.com/browser-use/browser-use" \
-    documentation="https://docs.browser-use.com" \
-    org.opencontainers.image.title="browseruse" \
-    org.opencontainers.image.vendor="browseruse" \
+    homepage="https://github.com/pagepilot/pagepilot" \
+    documentation="https://docs.pagepilot.com" \
+    org.opencontainers.image.title="pagepilot" \
+    org.opencontainers.image.vendor="pagepilot" \
     org.opencontainers.image.description="Make websites accessible for AI agents. Automate tasks online with ease." \
-    org.opencontainers.image.source="https://github.com/browser-use/browser-use" \
+    org.opencontainers.image.source="https://github.com/pagepilot/pagepilot" \
     com.docker.image.source.entrypoint="Dockerfile" \
     com.docker.desktop.extension.api.version=">= 1.4.7" \
     com.docker.desktop.extension.icon="https://avatars.githubusercontent.com/u/192012301?s=200&v=4" \
-    com.docker.extension.publisher-url="https://browser-use.com" \
+    com.docker.extension.publisher-url="https://pagepilot.com" \
     com.docker.extension.screenshots='[{"alt": "Screenshot of CLI splashscreen", "url": "https://github.com/user-attachments/assets/3606d851-deb1-439e-ad90-774e7960ded8"}, {"alt": "Screenshot of CLI running", "url": "https://github.com/user-attachments/assets/d018b115-95a4-4ac5-8259-b750bc5f56ad"}]' \
-    com.docker.extension.detailed-description='See here for detailed documentation: https://docs.browser-use.com' \
-    com.docker.extension.changelog='See here for release notes: https://github.com/browser-use/browser-use/releases' \
+    com.docker.extension.detailed-description='See here for detailed documentation: https://docs.pagepilot.com' \
+    com.docker.extension.changelog='See here for release notes: https://github.com/pagepilot/pagepilot/releases' \
     com.docker.extension.categories='web,utility-tools,ai'
 
 ARG TARGETPLATFORM
@@ -62,7 +62,7 @@ ENV TZ=UTC \
     IN_DOCKER=True
 
 # User config
-ENV BROWSERUSE_USER="browseruse" \
+ENV PAGEPILOT_USER="pagepilot" \
     DEFAULT_PUID=911 \
     DEFAULT_PGID=911
 
@@ -82,7 +82,7 @@ RUN echo 'Binary::apt::APT::Keep-Downloaded-Packages "1";' > /etc/apt/apt.conf.d
     && rm -f /etc/apt/apt.conf.d/docker-clean
 
 # Print debug info about build and save it to disk, for human eyes only, not used by anything else
-RUN (echo "[i] Docker build for Browser Use $(cat /VERSION.txt) starting..." \
+RUN (echo "[i] Docker build for PagePilot $(cat /VERSION.txt) starting..." \
     && echo "PLATFORM=${TARGETPLATFORM} ARCH=$(uname -m) ($(uname -s) ${TARGETARCH} ${TARGETVARIANT})" \
     && echo "BUILD_START_TIME=$(date +"%Y-%m-%d %H:%M:%S %s") TZ=${TZ} LANG=${LANG}" \
     && echo \
@@ -98,17 +98,17 @@ RUN (echo "[i] Docker build for Browser Use $(cat /VERSION.txt) starting..." \
     && echo -e '\n\n' \
     ) | tee -a /VERSION.txt
 
-# Create non-privileged user for browseruse and chrome
-RUN echo "[*] Setting up $BROWSERUSE_USER user uid=${DEFAULT_PUID}..." \
-    && groupadd --system $BROWSERUSE_USER \
-    && useradd --system --create-home --gid $BROWSERUSE_USER --groups audio,video $BROWSERUSE_USER \
-    && usermod -u "$DEFAULT_PUID" "$BROWSERUSE_USER" \
-    && groupmod -g "$DEFAULT_PGID" "$BROWSERUSE_USER" \
+# Create non-privileged user for pagepilot and chrome
+RUN echo "[*] Setting up $PAGEPILOT_USER user uid=${DEFAULT_PUID}..." \
+    && groupadd --system $PAGEPILOT_USER \
+    && useradd --system --create-home --gid $PAGEPILOT_USER --groups audio,video $PAGEPILOT_USER \
+    && usermod -u "$DEFAULT_PUID" "$PAGEPILOT_USER" \
+    && groupmod -g "$DEFAULT_PGID" "$PAGEPILOT_USER" \
     && mkdir -p /data \
-    && mkdir -p /home/$BROWSERUSE_USER/.config \
-    && chown -R $BROWSERUSE_USER:$BROWSERUSE_USER /home/$BROWSERUSE_USER \
-    && ln -s $DATA_DIR /home/$BROWSERUSE_USER/.config/browseruse \
-    && echo -e "\nBROWSERUSE_USER=$BROWSERUSE_USER PUID=$(id -u $BROWSERUSE_USER) PGID=$(id -g $BROWSERUSE_USER)\n\n" \
+    && mkdir -p /home/$PAGEPILOT_USER/.config \
+    && chown -R $PAGEPILOT_USER:$PAGEPILOT_USER /home/$PAGEPILOT_USER \
+    && ln -s $DATA_DIR /home/$PAGEPILOT_USER/.config/pagepilot \
+    && echo -e "\nPAGEPILOT_USER=$PAGEPILOT_USER PUID=$(id -u $PAGEPILOT_USER) PGID=$(id -g $PAGEPILOT_USER)\n\n" \
     | tee -a /VERSION.txt
     # DEFAULT_PUID and DEFAULT_PID are overridden by PUID and PGID in /bin/docker_entrypoint.sh at runtime
     # https://docs.linuxserver.io/general/understanding-puid-and-pgid
@@ -167,34 +167,34 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-$TARGETARCH$T
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/bin/chromium /usr/bin/chromium-browser \
     && ln -s /usr/bin/chromium /app/chromium-browser \
-    && mkdir -p "/home/${BROWSERUSE_USER}/.config/chromium/Crash Reports/pending/" \
-    && chown -R "$BROWSERUSE_USER:$BROWSERUSE_USER" "/home/${BROWSERUSE_USER}/.config" \
+    && mkdir -p "/home/${PAGEPILOT_USER}/.config/chromium/Crash Reports/pending/" \
+    && chown -R "$PAGEPILOT_USER:$PAGEPILOT_USER" "/home/${PAGEPILOT_USER}/.config" \
     && ( \
         which chromium-browser && /usr/bin/chromium-browser --version \
         && echo -e '\n\n' \
     ) | tee -a /VERSION.txt
 
 RUN --mount=type=cache,target=/root/.cache,sharing=locked,id=cache-$TARGETARCH$TARGETVARIANT \
-     echo "[+] Installing browser-use pip sub-dependencies..." \
+     echo "[+] Installing pagepilot pip sub-dependencies..." \
      && ( \
         uv sync --all-extras --no-dev --no-install-project \
         && echo -e '\n\n' \
      ) | tee -a /VERSION.txt
 
-# Copy the rest of the browser-use codebase
+# Copy the rest of the pagepilot codebase
 COPY . /app
 
-# Install the browser-use package and all of its optional dependencies
+# Install the pagepilot package and all of its optional dependencies
 RUN --mount=type=cache,target=/root/.cache,sharing=locked,id=cache-$TARGETARCH$TARGETVARIANT \
-     echo "[+] Installing browser-use pip library from source..." \
+     echo "[+] Installing pagepilot pip library from source..." \
      && ( \
         uv sync --all-extras --locked --no-dev \
-        && python -c "import browser_use; print('browser-use installed successfully')" \
+        && python -c "import pagepilot; print('pagepilot installed successfully')" \
         && echo -e '\n\n' \
      ) | tee -a /VERSION.txt
 
 RUN mkdir -p "$DATA_DIR/profiles/default" \
-    && chown -R $BROWSERUSE_USER:$BROWSERUSE_USER "$DATA_DIR" "$DATA_DIR"/* \
+    && chown -R $PAGEPILOT_USER:$PAGEPILOT_USER "$DATA_DIR" "$DATA_DIR"/* \
     && ( \
         echo -e "\n\n[√] Finished Docker build successfully. Saving build summary in: /VERSION.txt" \
         && echo -e "PLATFORM=${TARGETPLATFORM} ARCH=$(uname -m) ($(uname -s) ${TARGETARCH} ${TARGETVARIANT})\n" \
@@ -202,7 +202,7 @@ RUN mkdir -p "$DATA_DIR/profiles/default" \
     ) | tee -a /VERSION.txt
 
 
-USER "$BROWSERUSE_USER"
+USER "$PAGEPILOT_USER"
 VOLUME "$DATA_DIR"
 EXPOSE 9242
 EXPOSE 9222
@@ -210,4 +210,4 @@ EXPOSE 9222
 # HEALTHCHECK --interval=30s --timeout=20s --retries=15 \
 #     CMD curl --silent 'http://localhost:8000/health/' | grep -q 'OK'
 
-ENTRYPOINT ["browser-use"]
+ENTRYPOINT ["pagepilot"]

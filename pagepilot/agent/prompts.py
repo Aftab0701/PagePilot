@@ -61,7 +61,7 @@ class SystemPrompt:
 		"""Load the prompt template from the markdown file."""
 		try:
 			# Choose the appropriate template based on model type and mode
-			# Browser-use models use simplified prompts optimized for fine-tuned models
+			# PagePilot models use simplified prompts optimized for fine-tuned models
 			if self.is_pagepilot_model:
 				if self.flash_mode:
 					template_filename = 'system_prompt_pagepilot_flash.md'

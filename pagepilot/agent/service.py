@@ -589,7 +589,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.telemetry = ProductTelemetry()
 
 		# Event bus with WAL persistence
-		# Default to ~/.config/browseruse/events/{agent_session_id}.jsonl
+		# Default to ~/.config/pagepilot/events/{agent_session_id}.jsonl
 		# wal_path = CONFIG.PAGEPILOT_CONFIG_DIR / 'events' / f'{self.session_id}.jsonl'
 		self.eventbus = EventBus(name=f'Agent_{str(self.id)[-4:]}')
 

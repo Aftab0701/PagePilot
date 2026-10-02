@@ -1,4 +1,4 @@
-"""Browser Use CLI backed by Browser Harness"""
+"""PagePilot CLI backed by Browser Harness"""
 
 from __future__ import annotations
 
@@ -128,7 +128,7 @@ def _run_init_command(argv: list[str]) -> int | None:
 
 
 def _as_pagepilot_cli_text(text: str) -> str:
-	return text.replace('Browser Harness', 'Browser Use').replace('browser-harness', 'pagepilot')
+	return text.replace('Browser Harness', 'PagePilot').replace('browser-harness', 'pagepilot').replace('Browser Use', 'PagePilot').replace('browser-use', 'pagepilot')
 
 
 def _normalize_captured_cli_output(func, argv: list[str]) -> int:
@@ -300,7 +300,7 @@ def _raised_from_piped_code(exc: BaseException) -> bool:
 	return last is not None and last.tb_frame.f_code.co_filename == '<string>'
 
 
-_QUICKSTART = """Welcome to the Browser Use CLI. Allow your coding agent to reliably control a web browser.
+_QUICKSTART = """Welcome to the PagePilot CLI. Allow your coding agent to reliably control a web browser.
 
 The CLI allows your agent to control the browser via Python, and it manages the browser in the background.
 

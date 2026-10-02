@@ -17,7 +17,7 @@
 
 ## Overview
 
-Browser Use Cloud is the hosted platform for web automation. Stealth browsers with anti-fingerprinting, CAPTCHA solving, residential proxies in 195+ countries. Usage-based pricing via API keys.
+PagePilot Cloud is the hosted platform for web automation. Stealth browsers with anti-fingerprinting, CAPTCHA solving, residential proxies in 195+ countries. Usage-based pricing via API keys.
 
 - Web app: https://cloud.pagepilot.com/
 - API base: `https://api.pagepilot.com/api/v2/`
@@ -110,14 +110,14 @@ $0.01 init + per-step (varies by model):
 
 | Model | Per Step |
 |-------|---------|
-| Browser Use LLM | $0.002 |
-| Browser Use 2.0 | $0.006 |
+| PagePilot LLM | $0.002 |
+| PagePilot 2.0 | $0.006 |
 | Gemini Flash Lite | $0.005 |
 | GPT-4.1 Mini | $0.004 |
 | O3 | $0.03 |
 | Claude Sonnet 4.6 | $0.05 |
 
-Typical task: 10 steps = ~$0.03 (with Browser Use LLM)
+Typical task: 10 steps = ~$0.03 (with PagePilot LLM)
 
 ### V3 API (Token-Based)
 | Model | Input/1M | Output/1M |
@@ -146,7 +146,7 @@ Typical task: 10 steps = ~$0.03 (with Browser Use LLM)
 ## FAQ & Troubleshooting
 
 **Slow tasks?**
-- Switch models (Browser Use LLM is fastest)
+- Switch models (PagePilot LLM is fastest)
 - Set `start_url` to skip navigation
 - Use closer proxy country
 

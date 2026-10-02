@@ -2,7 +2,10 @@
 
 from typing import Any
 
-from pagepilot_sdk import ParameterSchema, SkillResponse
+try:
+	from pagepilot_sdk import ParameterSchema, SkillResponse
+except ImportError:
+	from browser_use_sdk import ParameterSchema, SkillResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 

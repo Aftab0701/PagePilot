@@ -1,4 +1,4 @@
-"""Cloud sync module for Browser Use."""
+"""Cloud sync module for PagePilot."""
 
 from pagepilot.sync.auth import CloudAuthConfig, DeviceAuthClient
 from pagepilot.sync.service import CloudSync

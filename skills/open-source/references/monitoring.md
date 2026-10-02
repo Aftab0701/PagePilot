@@ -88,7 +88,7 @@ docker run -d -p 3000:3000 -p 4318:4318 openlit/openlit
 
 ## Telemetry
 
-Browser Use collects anonymous usage data via PostHog.
+PagePilot collects anonymous usage data via PostHog.
 
 ### Opt Out
 

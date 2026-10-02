@@ -141,7 +141,7 @@ Auto-fill passwords and TOTP/2FA codes from 1Password vault:
 ### Setup
 1. Create a dedicated vault in 1Password
 2. Create a service account with vault access
-3. Connect to Browser Use Cloud (settings page)
+3. Connect to PagePilot Cloud (settings page)
 4. Use `op_vault_id` param in tasks
 
 ```python

@@ -4,11 +4,11 @@ The full test loop, gotchas, rubric, and output format for the `qa` skill. Every
 
 ## Always test on a cloud browser (tunnel localhost)
 
-**Run every QA test on a Browser Use cloud browser — never the user's local Chrome.** This is the default for *all* targets, public or local. A cloud browser is a clean, real-user environment: no logged-in sessions, no extensions, no clobbering the tab the user is working in, and it produces a `liveUrl` the user (and the report) can point to. Testing on the user's own Chrome contaminates the result with their state and is not what QA wants.
+**Run every QA test on a PagePilot cloud browser — never the user's local Chrome.** This is the default for *all* targets, public or local. A cloud browser is a clean, real-user environment: no logged-in sessions, no extensions, no clobbering the tab the user is working in, and it produces a `liveUrl` the user (and the report) can point to. Testing on the user's own Chrome contaminates the result with their state and is not what QA wants.
 
 This means a `localhost` site is **not** an exception that lets you skip the cloud browser — it's the case that *requires the tunnel*. A cloud browser lives on the public internet and cannot reach `localhost`, so you expose the dev server with a tunnel first, then point the cloud browser at the public URL. Do **not** fall back to the local daemon just because the site is local; tunnel it out.
 
-**0. Get a Browser Use API key — the only credential this skill uses.** The cloud browser authenticates with `PAGEPILOT_API_KEY`, and browser-harness is the single source of it: it auto-loads a `.env` (from its repo root and `agent-workspace/`) on every call, with the process env winning over that. Use *only* that key — never substitute another credential, and **never fall back to the user's local Chrome** if it's absent. Don't assume it's missing just because it isn't echoed in your shell; the authoritative test is whether a cloud browser starts (step 2's `start_remote_daemon(...)` returns a `liveUrl`).
+**0. Get a PagePilot API key — the only credential this skill uses.** The cloud browser authenticates with `PAGEPILOT_API_KEY`, and browser-harness is the single source of it: it auto-loads a `.env` (from its repo root and `agent-workspace/`) on every call, with the process env winning over that. Use *only* that key — never substitute another credential, and **never fall back to the user's local Chrome** if it's absent. Don't assume it's missing just because it isn't echoed in your shell; the authoritative test is whether a cloud browser starts (step 2's `start_remote_daemon(...)` returns a `liveUrl`).
 
 If no key is resolvable, do **not** proceed on local Chrome. Pick one of exactly two paths (ask the user which, if it's unclear), then make the key available and retry step 2:
 
@@ -45,7 +45,7 @@ curl -s -H "ngrok-skip-browser-warning: true" "$PUBLIC_URL" | head -c 200
 
 For a **public** target, skip the tunnel — just use the URL directly in step 2.
 
-**2. Spin up a cloud browser — with the BU proxy DISABLED — and drive the public URL.** `start_remote_daemon` creates the cloud browser, prints its `liveUrl`, and wires the daemon to `BU_NAME`. **Pass `proxyCountryCode=None`:** Browser Use's default residential proxy mangles ngrok's TLS, so the cloud browser lands on `chrome-error://` / `ERR_SSL_PROTOCOL_ERROR` even though `curl` and other sites work fine. Disabling the proxy fixes it.
+**2. Spin up a cloud browser — with the BU proxy DISABLED — and drive the public URL.** `start_remote_daemon` creates the cloud browser, prints its `liveUrl`, and wires the daemon to `BU_NAME`. **Pass `proxyCountryCode=None`:** PagePilot's default residential proxy mangles ngrok's TLS, so the cloud browser lands on `chrome-error://` / `ERR_SSL_PROTOCOL_ERROR` even though `curl` and other sites work fine. Disabling the proxy fixes it.
 
 ```bash
 browser-harness <<'PY'

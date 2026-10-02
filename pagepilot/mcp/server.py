@@ -600,7 +600,7 @@ class PagePilotServer:
 			'downloads_path': str(Path.home() / 'Downloads' / 'pagepilot-mcp'),
 			'wait_between_actions': 0.5,
 			'keep_alive': True,
-			'user_data_dir': '~/.config/browseruse/profiles/default',
+			'user_data_dir': '~/.config/pagepilot/profiles/default',
 			'device_scale_factor': 1.0,
 			'disable_security': False,
 			'headless': False,

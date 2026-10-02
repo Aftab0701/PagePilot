@@ -12,7 +12,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Browser Use Version
+      label: PagePilot Version
       description: |
         What exact version of `pagepilot` are you using? (Run `uv pip show pagepilot` or `git log -n 1`)
         **DO NOT WRITE `latest release` or `main` or a very old version or we will close your issue!**

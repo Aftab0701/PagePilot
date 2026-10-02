@@ -185,7 +185,7 @@ def _laminar_current_trace_id() -> str | None:
 
 
 def find_pagepilot_terminal_binary() -> str:
-	"""Find the terminal binary used by the Rust-backed Browser Use Agent."""
+	"""Find the terminal binary used by the Rust-backed PagePilot Agent."""
 	env_path = os.environ.get('PAGEPILOT_TERMINAL_BINARY')
 	if env_path:
 		return env_path
@@ -205,7 +205,7 @@ def find_pagepilot_terminal_binary() -> str:
 	if path_binary and _terminal_supports_sdk_server(Path(path_binary)):
 		return path_binary
 	raise BetaAgentError(
-		f'Could not find pagepilot-terminal. Install Browser Use Terminal with `{TERMINAL_INSTALL_COMMAND}`, '
+		f'Could not find pagepilot-terminal. Install PagePilot Terminal with `{TERMINAL_INSTALL_COMMAND}`, '
 		'install pagepilot-core, or set PAGEPILOT_TERMINAL_BINARY to a built terminal CLI.'
 	)
 
@@ -356,7 +356,7 @@ class RustSdkClient:
 			command = self.command[0] if self.command else 'pagepilot-terminal'
 			raise BetaAgentError(
 				f'Could not start Rust SDK server command {command!r}. '
-				f'Install Browser Use Terminal with `{TERMINAL_INSTALL_COMMAND}`, '
+				f'Install PagePilot Terminal with `{TERMINAL_INSTALL_COMMAND}`, '
 				'or set PAGEPILOT_TERMINAL_BINARY to a built terminal CLI.'
 			) from exc
 		self._reader_task = asyncio.create_task(self._read_stdout())
@@ -1283,7 +1283,7 @@ def _task_with_initial_actions(task: str, initial_actions: Any) -> str:
 		if url:
 			return f'First navigate to {url!r}, then complete the task.\n\n{task}'
 	actions = json.dumps(initial_actions, indent=2, default=str)
-	return f'Before the task, perform these Browser Use initial actions in order:\n{actions}\n\nThen complete the task.\n\n{task}'
+	return f'Before the task, perform these PagePilot initial actions in order:\n{actions}\n\nThen complete the task.\n\n{task}'
 
 
 def _initial_navigation_state_lines(completed_states: list[dict[str, Any]] | None) -> list[str]:
@@ -1338,7 +1338,7 @@ def _task_with_completed_initial_navigation_context(
 				initial_action_urls.append(url)
 	if initial_action_urls == urls:
 		actions = json.dumps(initial_actions, indent=2, default=str)
-		prefix = f'Before the task, perform these Browser Use initial actions in order:\n{actions}\n\nThen complete the task.\n\n'
+		prefix = f'Before the task, perform these PagePilot initial actions in order:\n{actions}\n\nThen complete the task.\n\n'
 		if cleaned_task.startswith(prefix):
 			cleaned_task = cleaned_task[len(prefix) :]
 	completed = ', '.join(repr(url) for url in urls)
@@ -4053,7 +4053,7 @@ def _load_rust_history(file_path: str | Path) -> AgentHistoryList:
 	with open(file_path, encoding='utf-8') as history_file:
 		data = json.load(history_file)
 	if not isinstance(data, dict):
-		raise BetaAgentError(f'Invalid Browser Use history file: {file_path}')
+		raise BetaAgentError(f'Invalid PagePilot history file: {file_path}')
 	for item in data.get('history', []):
 		if isinstance(item, dict):
 			item['model_output'] = None
@@ -4168,7 +4168,7 @@ def _unique_eventbus_name(agent_id: str, prefix: str = 'Agent') -> str:
 
 
 def _action_payload(action: Any) -> dict[str, Any]:
-	"""Serialize a Browser Use action model into JSON-like data for Rust task context."""
+	"""Serialize a PagePilot action model into JSON-like data for Rust task context."""
 	if isinstance(action, dict):
 		return action
 	if hasattr(action, 'model_dump'):
@@ -4211,7 +4211,7 @@ def _done_action_result(payload: dict[str, Any]) -> ActionResult | None:
 def _actions_instruction(payloads: list[dict[str, Any]]) -> str:
 	actions_json = json.dumps(payloads, indent=2, ensure_ascii=False, default=str)
 	return (
-		'Execute these Browser Use action models in order using the current browser page/session. '
+		'Execute these PagePilot action models in order using the current browser page/session. '
 		'Return a concise result for the executed actions.\n\n'
 		f'Actions:\n{actions_json}'
 	)
@@ -4233,7 +4233,7 @@ def _normalize_initial_action(action_name: str, params: Any) -> tuple[str, Any]:
 
 
 class Agent(Generic[Context, AgentStructuredOutput]):
-	"""Browser Use-style Agent backed by the Rust pagepilot-terminal core."""
+	"""PagePilot-style Agent backed by the Rust pagepilot-terminal core."""
 
 	def __init__(
 		self,
@@ -4446,7 +4446,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.managed_browser_executable_path = _managed_browser_executable_path(self.browser_session, self.browser_profile)
 		self.managed_browser_env = _managed_browser_env(self.browser_session, self.browser_profile)
 		self.cdp_headers = _extract_cdp_headers(self.browser_session, self.browser_profile)
-		self.pagepilotr_agent = _extract_user_agent(self.browser_session, self.browser_profile)
+		self.browser_user_agent = _extract_user_agent(self.browser_session, self.browser_profile)
 		self.highlight_enabled, self.highlight_color, self.highlight_duration_ms = _extract_highlight_settings(
 			self.browser_session, self.browser_profile
 		)
@@ -4545,19 +4545,19 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self._external_pause_event.set()
 
 	def _set_file_system(self, file_system_path: str | None = None) -> None:
-		"""Initialize or restore Browser Use file-system state."""
+		"""Initialize or restore PagePilot file-system state."""
 		self.file_system, self.file_system_path = _init_file_system(self.state, self.agent_directory, file_system_path)
 
 	def _set_screenshot_service(self) -> None:
-		"""Initialize Browser Use screenshot storage under the agent directory."""
+		"""Initialize PagePilot screenshot storage under the agent directory."""
 		self.screenshot_service = ScreenshotService(self.agent_directory)
 
 	def _set_pagepilot_version_and_source(self, source_override: str | None = None) -> None:
-		"""Expose Browser Use version/source metadata on the Rust-backed wrapper."""
+		"""Expose PagePilot version/source metadata on the Rust-backed wrapper."""
 		self.version, self.source = _pagepilot_version_and_source(source_override)
 
 	def _verify_and_setup_llm(self):
-		"""Mirror Browser Use LLM verification state for callers that use the helper."""
+		"""Mirror PagePilot LLM verification state for callers that use the helper."""
 		if self.llm is None:
 			return True
 		try:
@@ -4571,7 +4571,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return True
 
 	async def _log_agent_run(self) -> None:
-		"""Log Browser Use run metadata for the Rust-backed wrapper."""
+		"""Log PagePilot run metadata for the Rust-backed wrapper."""
 		self.logger.info(f'\033[34m🎯 Task: {self.task}\033[0m')
 		self.logger.debug(f'🤖 PagePilot Library Version {self.version} ({self.source})')
 		latest_version = await check_latest_pagepilot_version()
@@ -4581,7 +4581,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			)
 
 	def _log_agent_setup(self) -> None:
-		"""Log Browser Use run setup metadata for the Rust-backed wrapper."""
+		"""Log PagePilot run setup metadata for the Rust-backed wrapper."""
 		browser_session_id = getattr(self.browser_session, 'id', None) if self.browser_session else None
 		browser_session_suffix = str(browser_session_id)[-4:] if browser_session_id else 'None'
 		cdp_url = getattr(self.browser_session, 'cdp_url', None) if self.browser_session else None
@@ -4591,7 +4591,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		)
 
 	def _log_first_step_startup(self) -> None:
-		"""Log the first-step startup line used by Browser Use callers."""
+		"""Log the first-step startup line used by PagePilot callers."""
 		if len(self.history.history) != 0:
 			return
 		provider = getattr(self.llm, 'provider', None) or 'rust-terminal'
@@ -4599,7 +4599,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.logger.info(f'Starting a pagepilot agent with version {self.version}, with provider={provider} and model={model}')
 
 	def _log_main_execution_start(self, max_steps: int) -> None:
-		"""Log Browser Use's main execution-loop start for terminal-backed runs."""
+		"""Log PagePilot's main execution-loop start for terminal-backed runs."""
 		self.logger.debug(f'Starting main execution loop with max {max_steps} steps...')
 
 	def _log_step_context(self, browser_state_summary: BrowserStateSummary) -> None:
@@ -4662,7 +4662,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		)
 
 	def _log_final_outcome_messages(self) -> None:
-		"""Log Browser Use-style guidance for failed runs."""
+		"""Log PagePilot-style guidance for failed runs."""
 		is_successful = self.history.is_successful()
 		if is_successful is not False and is_successful is not None:
 			return
@@ -4740,7 +4740,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.logger.info(judge_log)
 
 	def _log_agent_event(self, max_steps: int, agent_run_error: str | None = None) -> None:
-		"""Emit Browser Use telemetry for a Rust-backed run."""
+		"""Emit PagePilot telemetry for a Rust-backed run."""
 		usage = self.history.usage
 		if usage is None:
 			total_input_tokens = 0
@@ -4796,7 +4796,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		)
 
 	def _record_run_telemetry(self, max_steps: int, agent_run_error: str | None = None) -> None:
-		"""Record Browser Use run telemetry without allowing telemetry failures to break the run."""
+		"""Record PagePilot run telemetry without allowing telemetry failures to break the run."""
 		if getattr(self, '_force_exit_telemetry_logged', False):
 			self.logger.debug('Telemetry for force exit (SIGINT) was logged by custom exit callback.')
 			return
@@ -4893,7 +4893,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		)
 
 	async def _log_run_usage_summary(self) -> None:
-		"""Log Browser Use token usage summary for a completed Rust-backed run."""
+		"""Log PagePilot token usage summary for a completed Rust-backed run."""
 		await self.token_cost_service.log_usage_summary()
 
 	async def _apply_terminal_usage_costs(self, events: list[dict[str, Any]]) -> None:
@@ -4917,7 +4917,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			self._eventbus_stopped = False
 
 	def _register_run_signal_handler(self, max_steps: int) -> SignalHandler:
-		"""Register Browser Use SIGINT/SIGTERM handling for a Rust-backed run."""
+		"""Register PagePilot SIGINT/SIGTERM handling for a Rust-backed run."""
 		self._unregister_run_signal_handler()
 		self._force_exit_telemetry_logged = False
 
@@ -4948,7 +4948,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			self._run_signal_handler = None
 
 	def _dispatch_run_start_events(self) -> None:
-		"""Emit Browser Use cloud lifecycle create events for a Rust-backed run."""
+		"""Emit PagePilot cloud lifecycle create events for a Rust-backed run."""
 		self._ensure_eventbus()
 		event_agent = self._cloud_event_agent()
 		if not self.state.session_initialized:
@@ -4959,7 +4959,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.eventbus.dispatch(CreateAgentTaskEvent.from_agent(event_agent))
 
 	def _dispatch_run_update_event(self) -> None:
-		"""Emit Browser Use cloud lifecycle update event for a completed Rust-backed run."""
+		"""Emit PagePilot cloud lifecycle update event for a completed Rust-backed run."""
 		self.eventbus.dispatch(UpdateAgentTaskEvent.from_agent(self._cloud_event_agent()))
 
 	async def _stop_eventbus_after_run(self) -> None:
@@ -4978,14 +4978,14 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self._eventbus_stopped = True
 
 	async def _finalize_run_cleanup(self) -> None:
-		"""Mirror Browser Use run cleanup ordering."""
+		"""Mirror PagePilot run cleanup ordering."""
 		self._unregister_run_signal_handler()
 		await self._stop_eventbus_after_run()
 		await self._close_browser_resources()
 		await self._close_sdk_client_if_not_keep_alive()
 
 	async def _finalize_exceptional_run(self, max_steps: int, agent_run_error: str) -> None:
-		"""Mirror Browser Use run finalization for exceptions that escape Rust execution."""
+		"""Mirror PagePilot run finalization for exceptions that escape Rust execution."""
 		if not hasattr(self, '_task_start_time') or not hasattr(self, '_session_start_time'):
 			self._initialize_run_lifecycle_state()
 		await self._log_run_usage_summary()
@@ -5000,13 +5000,13 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		await self._finalize_run_cleanup()
 
 	def _initialize_run_lifecycle_state(self) -> None:
-		"""Initialize Browser Use run timing and session state."""
+		"""Initialize PagePilot run timing and session state."""
 		self._session_start_time = time.time()
 		self._task_start_time = self._session_start_time
 		self._dispatch_run_start_events()
 
 	def _log_action(self, action, action_name: str, action_num: int, total_actions: int) -> None:
-		"""Log an action before execution with Browser Use-style structure."""
+		"""Log an action before execution with PagePilot-style structure."""
 		action_header = f'[{action_num}/{total_actions}] {action_name}:' if total_actions > 1 else f'{action_name}:'
 		action_data = action.model_dump(exclude_unset=True)
 		params = action_data.get(action_name, {}) if isinstance(action_data, dict) else {}
@@ -5433,7 +5433,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return self._message_manager
 
 	def _enhance_task_with_schema(self, task: str, output_model_schema: type[AgentStructuredOutput] | None) -> str:
-		"""Enhance task description with Browser Use-style output schema information."""
+		"""Enhance task description with PagePilot-style output schema information."""
 		if output_model_schema is None:
 			return task
 		try:
@@ -5444,7 +5444,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			return task
 
 	def _extract_start_url(self, task: str) -> str | None:
-		"""Extract Browser Use-style direct startup URL from a task string."""
+		"""Extract PagePilot-style direct startup URL from a task string."""
 		return _extract_start_url(task)
 
 	def _remove_think_tags(self, text: str) -> str:
@@ -5486,7 +5486,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return URL_PATTERN.sub(replace_url, text), replaced_urls
 
 	def _process_messsages_and_replace_long_urls_shorter_ones(self, input_messages: list[BaseMessage]) -> dict[str, str]:
-		"""Replace long URLs in Browser Use LLM messages in place."""
+		"""Replace long URLs in PagePilot LLM messages in place."""
 		from pagepilot.llm.messages import AssistantMessage, ContentPartTextParam, UserMessage
 
 		urls_replaced: dict[str, str] = {}
@@ -5565,7 +5565,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return result
 
 	def _setup_action_models(self) -> None:
-		"""Expose Browser Use-style action model classes from the configured tools."""
+		"""Expose PagePilot-style action model classes from the configured tools."""
 		self._setup_action_models_for_page(page_url=None)
 
 	def _setup_action_models_for_page(self, page_url: str | None) -> None:
@@ -5593,11 +5593,11 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			self.DoneAgentOutput = AgentOutput.type_with_custom_actions_no_thinking(self.DoneActionModel)
 
 	async def _update_action_models_for_page(self, page_url: str) -> None:
-		"""Update Browser Use-style action model classes for page-filtered tools."""
+		"""Update PagePilot-style action model classes for page-filtered tools."""
 		self._setup_action_models_for_page(page_url)
 
 	def _convert_initial_actions(self, actions: list[dict[str, dict[str, Any]]]) -> list[ActionModel]:
-		"""Convert dictionary initial actions to Browser Use action model instances when possible."""
+		"""Convert dictionary initial actions to PagePilot action model instances when possible."""
 		converted_actions: list[Any] = []
 		registry = getattr(getattr(self.tools, 'registry', None), 'registry', None)
 		registry_actions = getattr(registry, 'actions', {})
@@ -5623,7 +5623,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return converted_actions
 
 	async def _check_and_update_downloads(self, context: str = '') -> None:
-		"""Mirror Browser Use's downloaded-file tracking for supplied sessions."""
+		"""Mirror PagePilot's downloaded-file tracking for supplied sessions."""
 		if not self.has_downloads_path or self.browser_session is None:
 			return
 		try:
@@ -5654,11 +5654,11 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.available_file_paths = current_files
 
 	def save_file_system_state(self) -> None:
-		"""Save current Browser Use file system state back onto AgentState."""
+		"""Save current PagePilot file system state back onto AgentState."""
 		self.state.file_system_state = self.file_system.get_state()
 
 	async def _prepare_context(self, step_info: AgentStepInfo | None = None) -> BrowserStateSummary:
-		"""Prepare Browser Use step context from the configured browser session."""
+		"""Prepare PagePilot step context from the configured browser session."""
 		if self.browser_session is None:
 			raise AssertionError('BrowserSession is not set up')
 		get_state = getattr(self.browser_session, 'get_browser_state_summary', None)
@@ -5695,9 +5695,9 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return browser_state_summary
 
 	async def get_model_output(self, input_messages: list[BaseMessage]) -> AgentOutput:
-		"""Get next Browser Use action output from the configured Python LLM."""
+		"""Get next PagePilot action output from the configured Python LLM."""
 		if self.llm is None or not hasattr(self.llm, 'ainvoke'):
-			raise ValueError('A Browser Use-compatible llm with ainvoke(...) is required for get_model_output().')
+			raise ValueError('A PagePilot-compatible llm with ainvoke(...) is required for get_model_output().')
 
 		urls_replaced = self._process_messsages_and_replace_long_urls_shorter_ones(input_messages)
 		response = await self.llm.ainvoke(input_messages, output_format=self.AgentOutput)
@@ -5755,7 +5755,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		browser_state_summary: BrowserStateSummary,
 		input_messages: list[BaseMessage],
 	) -> None:
-		"""Handle Browser Use callbacks and conversation saving after an LLM response."""
+		"""Handle PagePilot callbacks and conversation saving after an LLM response."""
 		if self.register_new_step_callback and self.state.last_model_output:
 			if inspect.iscoroutinefunction(self.register_new_step_callback):
 				await self.register_new_step_callback(
@@ -5782,7 +5782,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			)
 
 	async def _get_next_action(self, browser_state_summary: BrowserStateSummary) -> None:
-		"""Fetch the next model output and run Browser Use post-LLM hooks."""
+		"""Fetch the next model output and run PagePilot post-LLM hooks."""
 		input_messages = self._message_manager.get_messages()
 		try:
 			model_output = await asyncio.wait_for(
@@ -5812,7 +5812,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		metadata: StepMetadata | None = None,
 		state_message: str | None = None,
 	) -> None:
-		"""Create and store a Browser Use history item from a browser-state summary."""
+		"""Create and store a PagePilot history item from a browser-state summary."""
 		if model_output:
 			selector_map = getattr(getattr(browser_state_summary, 'dom_state', None), 'selector_map', {})
 			interacted_elements = AgentHistory.get_interacted_element(model_output, selector_map)
@@ -5842,7 +5842,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		)
 
 	async def _post_process(self) -> None:
-		"""Handle Browser Use-style post-action bookkeeping."""
+		"""Handle PagePilot-style post-action bookkeeping."""
 		await self._check_and_update_downloads('after executing actions')
 		if self.state.last_result and len(self.state.last_result) == 1 and self.state.last_result[-1].error:
 			self.state.consecutive_failures += 1
@@ -5863,7 +5863,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 					self.logger.info(f'👉 Attachment {index + 1 if total_attachments > 1 else ""}: {file_path}')
 
 	async def _handle_step_error(self, error: Exception) -> None:
-		"""Convert a step exception into Browser Use-style state.last_result."""
+		"""Convert a step exception into PagePilot-style state.last_result."""
 		if isinstance(error, InterruptedError):
 			self.logger.error('The agent was interrupted mid-step' + (f' - {error}' if str(error) else ''))
 			return
@@ -5879,7 +5879,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.state.last_result = [ActionResult(error=error_msg)]
 
 	async def _finalize(self, browser_state_summary: BrowserStateSummary | None) -> None:
-		"""Finalize one Browser Use-style step after Rust-backed helper execution."""
+		"""Finalize one PagePilot-style step after Rust-backed helper execution."""
 		step_end_time = time.time()
 		if not self.state.last_result:
 			return
@@ -5945,11 +5945,11 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self.AgentOutput = self.DoneAgentOutput
 
 	async def step(self, step_info: AgentStepInfo | None = None) -> None:
-		"""Execute one Browser Use-style step through the Rust terminal core."""
+		"""Execute one PagePilot-style step through the Rust terminal core."""
 		await self.take_step(step_info)
 
 	async def take_step(self, step_info: AgentStepInfo | None = None) -> tuple[bool, bool]:
-		"""Take one Rust terminal turn and return Browser Use-style step status."""
+		"""Take one Rust terminal turn and return PagePilot-style step status."""
 		if step_info is not None:
 			self.state.n_steps = max(self.state.n_steps, step_info.step_number)
 			if step_info.step_number == 0:
@@ -5963,11 +5963,11 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return False, False
 
 	async def multi_act(self, actions: list[ActionModel]) -> list[ActionResult]:
-		"""Execute Browser Use action models through the Rust-backed session.
+		"""Execute PagePilot action models through the Rust-backed session.
 
 		The Rust terminal owns browser actions, so non-`done` action batches are
 		serialized as a follow-up instruction for the active Rust session. A
-		standalone `done` action preserves Browser Use's local completion semantics.
+		standalone `done` action preserves PagePilot's local completion semantics.
 		"""
 		payloads = []
 		total_actions = len(actions)
@@ -6001,7 +6001,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return history.action_results()
 
 	async def _execute_initial_actions(self, *, allow_terminal_run: bool = True) -> None:
-		"""Execute configured Browser Use initial actions through the Rust-backed action path."""
+		"""Execute configured PagePilot initial actions through the Rust-backed action path."""
 		if not self.initial_actions or self.state.follow_up_task or self._initial_actions_executed:
 			return
 		self.logger.debug(f'⚡ Executing {len(self.initial_actions)} initial actions...')
@@ -6187,7 +6187,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return context
 
 	def add_new_task(self, new_task: str) -> None:
-		"""Add a follow-up task while keeping the same Browser Use-style agent object."""
+		"""Add a follow-up task while keeping the same PagePilot-style agent object."""
 		self.task = new_task
 		self._message_manager.add_new_task(new_task)
 		self.state.follow_up_task = True
@@ -6198,7 +6198,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self._external_pause_event.set()
 
 	def save_history(self, file_path: str | Path | None = None) -> None:
-		"""Save the current Browser Use history to disk."""
+		"""Save the current PagePilot history to disk."""
 		if not file_path:
 			file_path = 'AgentHistory.json'
 		self.history.save_to_file(file_path, sensitive_data=self.sensitive_data)
@@ -6210,12 +6210,12 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		skip_failures: bool = True,
 		delay_between_actions: float = 2.0,
 	) -> list[ActionResult]:
-		"""Rerun through the Rust core and return Browser Use-style action results.
+		"""Rerun through the Rust core and return PagePilot-style action results.
 
 		The Python Agent replays serialized Python action models. Rust terminal
 		histories do not expose those action models, so this compatibility path
 		reruns the current task through the Rust core while preserving the public
-		retry and skip-failure controls from Browser Use's rerun API.
+		retry and skip-failure controls from PagePilot's rerun API.
 		"""
 		_ = history
 		max_retries = max(1, max_retries)
@@ -6244,7 +6244,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return last_results or [ActionResult(error=error_msg)]
 
 	async def load_and_rerun(self, history_file: str | Path | None = None, **kwargs) -> list[ActionResult]:
-		"""Load a saved Rust-backed Browser Use history and rerun the task."""
+		"""Load a saved Rust-backed PagePilot history and rerun the task."""
 		if not history_file:
 			history_file = 'AgentHistory.json'
 		history = _load_rust_history(history_file)
@@ -6276,7 +6276,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			loop.create_task(self._cancel_active_sdk_run())
 
 	async def close(self):
-		"""Close Browser Use session resources when the caller did not request keep-alive."""
+		"""Close PagePilot session resources when the caller did not request keep-alive."""
 		await self._close_browser_resources()
 		await self._close_sdk_client_if_not_keep_alive()
 		return None
@@ -6315,7 +6315,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			self._sdk_client = None
 
 	async def _close_browser_resources(self):
-		"""Close Browser Use session resources without tearing down the Rust SDK process."""
+		"""Close PagePilot session resources without tearing down the Rust SDK process."""
 		try:
 			await self._close_sdk_browser_resources()
 			if self.browser_session is not None:
@@ -6333,7 +6333,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return None
 
 	async def log_completion(self) -> None:
-		"""Log Browser Use-style task completion."""
+		"""Log PagePilot-style task completion."""
 		if self.history.is_successful():
 			self.logger.info('✅ Task completed successfully')
 
@@ -6347,7 +6347,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return asyncio.run(self.run(max_steps=max_steps, on_step_start=on_step_start, on_step_end=on_step_end))
 
 	async def authenticate_cloud_sync(self, show_instructions: bool = True) -> bool:
-		"""Browser Use-compatible cloud-sync hook.
+		"""PagePilot-compatible cloud-sync hook.
 
 		The upstream Python Agent currently reports cloud sync as unavailable.
 		The Rust wrapper mirrors that contract.
@@ -6357,7 +6357,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		return False
 
 	def get_trace_object(self) -> dict[str, Any]:
-		"""Get Browser Use-style trace and trace_details data for the Rust-backed run."""
+		"""Get PagePilot-style trace and trace_details data for the Rust-backed run."""
 
 		def extract_task_website(task_text: str) -> str | None:
 			match = re.search(
@@ -6485,7 +6485,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 
 		put('cdp_url', _extract_cdp_url(self.browser_session) or _extract_profile_cdp_url(self.browser_profile))
 		put('cdp_headers', self.cdp_headers or None)
-		put('user_agent', self.pagepilotr_agent)
+		put('user_agent', self.browser_user_agent)
 		put('viewport', self.browser_viewport)
 		put('window_size', self.browser_window_size)
 		put('storage_state', self.browser_storage_state)
@@ -6655,7 +6655,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		}
 
 	async def _check_stop_or_pause(self) -> None:
-		"""Check Browser Use-style stop/pause controls and raise when interrupted."""
+		"""Check PagePilot-style stop/pause controls and raise when interrupted."""
 		if self.register_should_stop_callback is not None:
 			should_stop = self.register_should_stop_callback()
 			if inspect.isawaitable(should_stop):
@@ -6735,8 +6735,8 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 			env['BU_CDP_URL'] = cdp_url
 		if self.cdp_headers:
 			env['BU_CDP_HEADERS'] = json.dumps(self.cdp_headers)
-		if self.pagepilotr_agent:
-			env['BU_BROWSER_USER_AGENT'] = self.pagepilotr_agent
+		if self.browser_user_agent:
+			env['BU_BROWSER_USER_AGENT'] = self.browser_user_agent
 		if self.highlight_enabled is not None:
 			env['PAGEPILOT_TERMINAL_AUTO_HIGHLIGHT'] = 'true' if self.highlight_enabled else 'false'
 		if self.highlight_color:

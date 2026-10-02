@@ -3488,7 +3488,7 @@ def test_beta_agent_bridges_llm_credentials_to_terminal_env(monkeypatch):
 		llm=LLM('deepseek', 'deepseek-chat', api_key='llm-deepseek-key', base_url='https://ignored.example'),
 	)
 	pagepilot_agent = Agent(
-		task='Browser Use credentials.',
+		task='PagePilot credentials.',
 		llm=LLM('pagepilot', 'bu-2-0', api_key='llm-pagepilot-key', base_url='https://llm.example/v1'),
 	)
 	ambient_env = Agent(
@@ -3628,7 +3628,7 @@ def test_beta_agent_translates_browser_profile_remote_user_agent(monkeypatch):
 	env = agent._run_env()
 
 	assert env['LLM_BROWSER_BROWSER_MODE'] == 'remote-cdp'
-	assert agent.pagepilotr_agent == 'PagePilotRemote/2.0'
+	assert agent.browser_user_agent == 'PagePilotRemote/2.0'
 	assert env['BU_BROWSER_USER_AGENT'] == 'PagePilotRemote/2.0'
 
 
@@ -3782,7 +3782,7 @@ def test_beta_agent_translates_browser_profile_managed_launch_args(monkeypatch):
 
 	assert env['LLM_BROWSER_BROWSER_MODE'] == 'managed-headless'
 	assert agent.managed_browser_args == launch_args
-	assert agent.pagepilotr_agent == 'PagePilotTest/1.0'
+	assert agent.browser_user_agent == 'PagePilotTest/1.0'
 	assert env['BU_BROWSER_USER_AGENT'] == 'PagePilotTest/1.0'
 	assert '--lang=en-US' in launch_args
 	assert '--window-size=1440,900' in launch_args
@@ -4382,7 +4382,7 @@ def test_beta_agent_preserves_ordered_initial_actions_context():
 		{'navigate': {'url': 'https://example.com', 'new_tab': False}},
 		{'click': {'index': 3}},
 	]
-	assert 'Browser Use initial actions in order' in agent.task
+	assert 'PagePilot initial actions in order' in agent.task
 	assert '"navigate"' in agent.task
 	assert '"click_element_by_index"' in agent.task
 	assert 'Then complete the task.' in agent.task
@@ -4525,8 +4525,8 @@ def test_beta_agent_enables_flash_mode_for_pagepilot_llm_provider():
 			return type('Result', (), {'usage': None})()
 
 	pagepilot_llm = PagePilotLLM()
-	pagepilot_agent = PagePilotAgent(task='Use Browser Use model.', llm=pagepilot_llm, directly_open_url=False)
-	beta_pagepilot_agent = BetaAgent(task='Use Browser Use model.', llm=pagepilot_llm, directly_open_url=False)
+	pagepilot_agent = PagePilotAgent(task='Use PagePilot model.', llm=pagepilot_llm, directly_open_url=False)
+	beta_pagepilot_agent = BetaAgent(task='Use PagePilot model.', llm=pagepilot_llm, directly_open_url=False)
 	beta_other_agent = BetaAgent(task='Use another model.', llm=OtherLLM(), directly_open_url=False)
 
 	assert pagepilot_agent.settings.flash_mode is True
@@ -4698,7 +4698,7 @@ def test_beta_agent_eventbus_name_matches_pagepilot_suffix_prefix():
 		async def ainvoke(self, messages, output_format=None, **kwargs):
 			return type('Result', (), {'usage': None})()
 
-	pagepilot_agent = PagePilotAgent(task='Inspect event bus.', llm=LLM(), task_id='browseruseabcd', directly_open_url=False)
+	pagepilot_agent = PagePilotAgent(task='Inspect event bus.', llm=LLM(), task_id='pagepilotabcd', directly_open_url=False)
 	beta_agent = BetaAgent(task='Inspect event bus.', llm=LLM(), task_id='rustagentwxyz', directly_open_url=False)
 
 	assert pagepilot_agent.eventbus.name == 'Agent_abcd'
@@ -6553,7 +6553,7 @@ async def test_beta_agent_multi_act_routes_actions_to_followup():
 	)
 
 	assert seen[0][1] == 2
-	assert 'Browser Use action models' in seen[0][0]
+	assert 'PagePilot action models' in seen[0][0]
 	assert '"click_element"' in seen[0][0]
 	assert '"input_text"' in seen[0][0]
 	assert results[0].extracted_content == 'actions applied'

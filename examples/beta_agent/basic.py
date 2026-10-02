@@ -1,7 +1,7 @@
-"""Run the Rust-backed Browser Use Agent.
+"""Run the Rust-backed PagePilot Agent.
 
 Set PAGEPILOT_TERMINAL_BINARY when the terminal binary is not on PATH.
-Set BU_CDP_URL or PAGEPILOT_CDP_URL to attach to a remote Browser Use cloud browser.
+Set BU_CDP_URL or PAGEPILOT_CDP_URL to attach to a remote PagePilot cloud browser.
 """
 
 import asyncio
@@ -23,7 +23,7 @@ async def main() -> None:
 	agent = Agent(
 		task=task,
 		llm=ChatPagePilot(model='openai/gpt-5.5'),
-		# llm=ChatPagePilot(),  # Browser Use's own optimized model (bu-2-0)
+		# llm=ChatPagePilot(),  # PagePilot's own optimized model (bu-2-0)
 		# llm=ChatOpenAI(model='gpt-5.5'),
 		# llm=ChatGoogle(model='gemini-3.1-pro-preview'),
 		# llm=ChatAnthropic(model='claude-opus-4-8'),  # Sonnet also works well.

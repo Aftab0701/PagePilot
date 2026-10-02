@@ -1,6 +1,6 @@
 # Browser API (Direct CDP Access)
 
-Connect directly to Browser Use stealth browsers via Chrome DevTools Protocol.
+Connect directly to PagePilot stealth browsers via Chrome DevTools Protocol.
 
 ## Table of Contents
 - [WebSocket Connection](#websocket-connection)

@@ -332,7 +332,8 @@ class BrowserChannel(str, Enum):
 
 
 # Using constants from central location in pagepilot.config
-BROWSERUSE_DEFAULT_CHANNEL = BrowserChannel.CHROMIUM
+PAGEPILOT_DEFAULT_CHANNEL = BrowserChannel.CHROMIUM
+PAGEPILOT_DEFAULT_CHANNEL = PAGEPILOT_DEFAULT_CHANNEL
 
 
 # ===== Type definitions with validators =====
@@ -651,7 +652,7 @@ class BrowserProfile(BrowserConnectArgs, BrowserLaunchPersistentContextArgs, Bro
 	)
 	captcha_solver: bool = Field(
 		default=True,
-		description='Enable the captcha solver watchdog that listens for captcha events from the browser proxy. Automatically pauses agent steps while a CAPTCHA is being solved. Only active when the browser emits PagePilot CDP events (e.g. Browser Use cloud browsers). Harmless when disabled or when events are not emitted.',
+		description='Enable the captcha solver watchdog that listens for captcha events from the browser proxy. Automatically pauses agent steps while a CAPTCHA is being solved. Only active when the browser emits PagePilot CDP events (e.g. PagePilot cloud browsers). Harmless when disabled or when events are not emitted.',
 	)
 	demo_mode: bool = Field(
 		default=False,
@@ -735,7 +736,7 @@ class BrowserProfile(BrowserConnectArgs, BrowserLaunchPersistentContextArgs, Bro
 	# 	default_factory=list, description='List of Chrome extension IDs to preinstall.'
 	# )
 	# extensions_dir: Path = Field(
-	# 	default_factory=lambda: Path('~/.config/browseruse/cache/extensions').expanduser(),
+	# 	default_factory=lambda: Path('~/.config/pagepilot/cache/extensions').expanduser(),
 	# 	description='Directory containing .crx extension files.',
 	# )
 
@@ -799,7 +800,7 @@ class BrowserProfile(BrowserConnectArgs, BrowserLaunchPersistentContextArgs, Bro
 		to avoid corrupting the default data dir created with a different channel.
 		"""
 
-		is_not_using_default_chromium = self.executable_path or self.channel not in (BROWSERUSE_DEFAULT_CHANNEL, None)
+		is_not_using_default_chromium = self.executable_path or self.channel not in (PAGEPILOT_DEFAULT_CHANNEL, None)
 		if self.user_data_dir == CONFIG.PAGEPILOT_DEFAULT_USER_DATA_DIR and is_not_using_default_chromium:
 			alternate_name = (
 				Path(self.executable_path).name.lower().replace(' ', '-')
@@ -809,7 +810,7 @@ class BrowserProfile(BrowserConnectArgs, BrowserLaunchPersistentContextArgs, Bro
 				else 'None'
 			)
 			logger.warning(
-				f'⚠️ {self} Changing user_data_dir= {_log_pretty_path(self.user_data_dir)} ➡️ .../default-{alternate_name} to avoid {alternate_name.upper()} corruping default profile created by {BROWSERUSE_DEFAULT_CHANNEL.name}'
+				f'⚠️ {self} Changing user_data_dir= {_log_pretty_path(self.user_data_dir)} ➡️ .../default-{alternate_name} to avoid {alternate_name.upper()} corruping default profile created by {PAGEPILOT_DEFAULT_CHANNEL.name}'
 			)
 			self.user_data_dir = CONFIG.PAGEPILOT_DEFAULT_USER_DATA_DIR.parent / f'default-{alternate_name}'
 		return self

@@ -94,7 +94,7 @@ class OldConfig:
 
 	@property
 	def PAGEPILOT_CONFIG_DIR(self) -> Path:
-		path = Path(os.getenv('PAGEPILOT_CONFIG_DIR', str(self.XDG_CONFIG_HOME / 'browseruse'))).expanduser().resolve()
+		path = Path(os.getenv('PAGEPILOT_CONFIG_DIR', str(self.XDG_CONFIG_HOME / 'pagepilot'))).expanduser().resolve()
 		self._ensure_dirs()
 		return path
 
@@ -122,7 +122,7 @@ class OldConfig:
 		"""Create directories if they don't exist (only once)"""
 		if not self._dirs_created:
 			config_dir = (
-				Path(os.getenv('PAGEPILOT_CONFIG_DIR', str(self.XDG_CONFIG_HOME / 'browseruse'))).expanduser().resolve()
+				Path(os.getenv('PAGEPILOT_CONFIG_DIR', str(self.XDG_CONFIG_HOME / 'pagepilot'))).expanduser().resolve()
 			)
 			config_dir.mkdir(parents=True, exist_ok=True)
 			(config_dir / 'profiles').mkdir(parents=True, exist_ok=True)
@@ -412,7 +412,7 @@ class Config:
 			return Path(env_config.PAGEPILOT_CONFIG_DIR).expanduser() / 'config.json'
 		else:
 			xdg_config = Path(env_config.XDG_CONFIG_HOME).expanduser()
-			return xdg_config / 'browseruse' / 'config.json'
+			return xdg_config / 'pagepilot' / 'config.json'
 
 	def _get_db_config(self) -> DBStyleConfigJSON:
 		"""Load and migrate config.json."""

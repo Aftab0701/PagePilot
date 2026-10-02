@@ -36,7 +36,7 @@ browser_session = BrowserSession(
 	browser_profile=BrowserProfile(
 		prohibited_domains=prohibited_domains,
 		headless=False,  # Set to True to run without visible browser
-		user_data_dir='~/.config/browseruse/profiles/blocked-demo',
+		user_data_dir='~/.config/pagepilot/profiles/blocked-demo',
 	),
 )
 

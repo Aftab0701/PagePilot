@@ -1277,7 +1277,7 @@ class BrowserSession(BaseModel):
 				self.logger.debug(f'File already tracked: {event.path}')
 
 	def _cloud_session_id_from_cdp_url(self) -> str | None:
-		"""Derive cloud browser session ID from a Browser Use CDP URL."""
+		"""Derive cloud browser session ID from a PagePilot CDP URL."""
 		if not self.cdp_url:
 			return None
 		host = urlparse(self.cdp_url).hostname or ''
@@ -3244,7 +3244,7 @@ class BrowserSession(BaseModel):
 				// Interactive elements data
 				const interactiveElements = {json.dumps(elements_data)};
 
-				console.log('=== BROWSER-USE HIGHLIGHTING ===');
+				console.log('=== PAGEPILOT HIGHLIGHTING ===');
 				console.log('Highlighting', interactiveElements.length, 'interactive elements');
 
 				// Double-check: Remove any existing highlight container first

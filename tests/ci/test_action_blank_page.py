@@ -100,7 +100,7 @@ def _make_prompt(state):
 	from pagepilot.agent.prompts import AgentMessagePrompt
 	from pagepilot.filesystem.file_system import FileSystem
 
-	tmp_dir = tempfile.mkdtemp(prefix='browseruse_test_')
+	tmp_dir = tempfile.mkdtemp(prefix='pagepilot_test_')
 	file_system = FileSystem(base_dir=tmp_dir, create_default_files=False)
 	return AgentMessagePrompt(
 		browser_state_summary=state,

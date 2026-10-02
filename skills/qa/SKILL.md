@@ -1,6 +1,6 @@
 ---
 name: qa
-description: QA-test a website or web app and return a 1-5 quality score (5 = flawless, 1 = broken) with evidence. Use when the user wants to test, QA, evaluate, score, or "check how good" a site, page, flow, or app — including a local dev server (e.g. "qa test localhost:5173", "does the checkout work?", "rate this landing page"). Drives a real Browser Use cloud browser, tunneling localhost automatically.
+description: QA-test a website or web app and return a 1-5 quality score (5 = flawless, 1 = broken) with evidence. Use when the user wants to test, QA, evaluate, score, or "check how good" a site, page, flow, or app — including a local dev server (e.g. "qa test localhost:5173", "does the checkout work?", "rate this landing page"). Drives a real PagePilot cloud browser, tunneling localhost automatically.
 allowed-tools: Bash, Read, Task
 ---
 
@@ -19,7 +19,7 @@ From the user's invocation (the text after `/qa`, or their message):
 This skill's verdict is **visual** — you judge the app by looking at screenshots. So before anything else, check whether *you* — the agent running this skill — can actually see images:
 
 - **You have vision (multimodal / image input)** → you can judge screenshots yourself. Continue to "Single flow vs. fan-out" below and choose by scale.
-- **You have no vision (text-only model, no image support)** → you **cannot** judge screenshots, and neither can same-model subagents you'd spawn. You **must** hand the visual judgment to **Browser Use v2 cloud agents**, whose own LLM looks at the page server-side and returns a text verdict (`judge` pass/fail + a 1–5 `structuredOutput`). Use v2 for **every** flow — even a single one — per `references/pagepilot-v2.md`. Do **not** drive `browser-harness` yourself to read screenshots, and do **not** fan out to your own (equally blind) subagents. The single-flow-vs-fan-out choice below does not apply to you — it's v2 either way.
+- **You have no vision (text-only model, no image support)** → you **cannot** judge screenshots, and neither can same-model subagents you'd spawn. You **must** hand the visual judgment to **PagePilot v2 cloud agents**, whose own LLM looks at the page server-side and returns a text verdict (`judge` pass/fail + a 1–5 `structuredOutput`). Use v2 for **every** flow — even a single one — per `references/pagepilot-v2.md`. Do **not** drive `browser-harness` yourself to read screenshots, and do **not** fan out to your own (equally blind) subagents. The single-flow-vs-fan-out choice below does not apply to you — it's v2 either way.
 
 If you're unsure whether you can see images, assume you can't and use v2.
 
@@ -29,14 +29,14 @@ If you're unsure whether you can see images, assume you can't and use v2.
 
 - **Testing one flow / one thing?** Don't bother with subagents — **drive `browser-harness` directly** yourself, following `references/methodology.md`. That's the right, lowest-overhead tool for a single test, and it's how the rest of this skill works.
 - **Testing many flows / a lot at once?** **Fan out to subagents — one per flow — so they run in parallel.** Here the user has a choice of subagent type (ask if unclear; **recommend v2**):
-  - **Browser Use v2 cloud agents — recommended.** Each flow becomes an autonomous v2 task with **`judge`** (pass/fail) + **`structuredOutput`** (1–5 score), running server-side and **in parallel**, returning step-by-step screenshot evidence. **Spends Browser Use credits** (~$0.01/task + ~$0.006/step + $0.02/hr browser). Per-task flow + how to fan out: `references/pagepilot-v2.md`.
-  - **Your harness's built-in subagents** — spawn Claude Code subagents (the Agent tool), each driving `browser-harness` through `references/methodology.md`. No Browser Use *task* credits; uses your agent's own usage.
+  - **PagePilot v2 cloud agents — recommended.** Each flow becomes an autonomous v2 task with **`judge`** (pass/fail) + **`structuredOutput`** (1–5 score), running server-side and **in parallel**, returning step-by-step screenshot evidence. **Spends PagePilot credits** (~$0.01/task + ~$0.006/step + $0.02/hr browser). Per-task flow + how to fan out: `references/pagepilot-v2.md`.
+  - **Your harness's built-in subagents** — spawn Claude Code subagents (the Agent tool), each driving `browser-harness` through `references/methodology.md`. No PagePilot *task* credits; uses your agent's own usage.
 
 Rule of thumb (**vision agents only** — text-only agents use v2 for everything, see above): **one flow → browser-harness directly; many flows → subagents (v2 recommended).** Either way `browser-harness` is required — as the direct driver, the subagent driver, the v2 key store, and the localhost tunnel.
 
 ## Dependency: browser-harness (required — install it yourself)
 
-This skill runs the test through **browser-harness** — a separate tool you install once. It is not optional; QA must run on a real Browser Use cloud browser, never the user's local Chrome.
+This skill runs the test through **browser-harness** — a separate tool you install once. It is not optional; QA must run on a real PagePilot cloud browser, never the user's local Chrome.
 
 **Before anything else, verify it's available:**
 

@@ -1,5 +1,5 @@
 ARG BASE_TAG=latest
-FROM browseruse/base-system:${BASE_TAG}
+FROM pagepilot/base-system:${BASE_TAG}
 
 WORKDIR /tmp
 COPY pyproject.toml ./

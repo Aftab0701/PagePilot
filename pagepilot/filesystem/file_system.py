@@ -114,7 +114,7 @@ def _markdown_inline_to_rml(text: str) -> str:
 	return ''.join(rendered)
 
 
-DEFAULT_FILE_SYSTEM_PATH = 'browseruse_agent_data'
+DEFAULT_FILE_SYSTEM_PATH = 'pagepilot_agent_data'
 
 
 class FileSystemError(Exception):

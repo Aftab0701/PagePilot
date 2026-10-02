@@ -1,10 +1,10 @@
 ---
 name: x402
-description: Set up Browser Use Cloud payments with x402 — pay per request from a crypto wallet (USDC on Base mainnet), no signup or API key. Two setups it works out up front — "just use it" (set up a wallet so you or Claude Code can run cloud browser tasks paid from the wallet — Claude writes and runs throwaway scripts, nothing touches your codebase) or "build it in" (install the SDK and write the key + code into your project). Walks through wallet setup, funding, .env, and a ~$1 test run. Use when the user asks about x402, pay-per-use, USDC payments, or wants Browser Use Cloud without an API key. For the free-tier signup (reverse-CAPTCHA → API key), use `pagepilot cloud signup` or the `cloud` skill instead.
+description: Set up PagePilot Cloud payments with x402 — pay per request from a crypto wallet (USDC on Base mainnet), no signup or API key. Two setups it works out up front — "just use it" (set up a wallet so you or Claude Code can run cloud browser tasks paid from the wallet — Claude writes and runs throwaway scripts, nothing touches your codebase) or "build it in" (install the SDK and write the key + code into your project). Walks through wallet setup, funding, .env, and a ~$1 test run. Use when the user asks about x402, pay-per-use, USDC payments, or wants PagePilot Cloud without an API key. For the free-tier signup (reverse-CAPTCHA → API key), use `pagepilot cloud signup` or the `cloud` skill instead.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
-# Browser Use Cloud — pay with x402 (crypto wallet)
+# PagePilot Cloud — pay with x402 (crypto wallet)
 
 This is a scripted flow. Follow the steps in order. x402 only works through the **SDK** (`pagepilot-sdk` for Python, the `pagepilot` npm package for TS) — there is no `pagepilot` CLI command for it, so every step runs a short SDK script.
 
@@ -24,10 +24,10 @@ This is a scripted flow. Follow the steps in order. x402 only works through the 
 
 **Ask:** (header: `Use x402`) — put the explanation and the question both in the `question` field, exactly:
 
-> x402 is a protocol from Coinbase that, instead of presenting an API key, allows you to use crypto to pay for API requests. x402 lets you pay Browser Use per request from a crypto wallet with USDC on Base — no signup, API key, or credit card needed, just a wallet. Setup takes a few minutes: get or make a wallet, add funds, save the key in `.env`, and test it.
+> x402 is a protocol from Coinbase that, instead of presenting an API key, allows you to use crypto to pay for API requests. x402 lets you pay PagePilot per request from a crypto wallet with USDC on Base — no signup, API key, or credit card needed, just a wallet. Setup takes a few minutes: get or make a wallet, add funds, save the key in `.env`, and test it.
 >
 > How do you want to use x402?
-- **Just use it** — Run Browser Use tasks, paid from your wallet, here in terminal by asking me. I set up the wallet and key.
+- **Just use it** — Run PagePilot tasks, paid from your wallet, here in terminal by asking me. I set up the wallet and key.
 - **Build it in** — You're coding an app and want x402 in it. I will help you install the SDK, save the key to your project's `.env`, and add code.
 
 **Do:** "Just use it" → `SETUP = A`. "Build it in" → `SETUP = B`.
@@ -36,7 +36,7 @@ This is a scripted flow. Follow the steps in order. x402 only works through the 
 
 ## Step 2 — Find the account (check before asking)
 
-**Do:** Look for an existing Browser Use API key, in this order. Don't say anything yet.
+**Do:** Look for an existing PagePilot API key, in this order. Don't say anything yet.
 1. `PAGEPILOT_API_KEY` in the environment
 2. a `PAGEPILOT_API_KEY=` line in `./.env`
 3. `~/.pagepilot/config.json` (saved by `pagepilot cloud login` / `signup`)
@@ -45,13 +45,13 @@ This is a scripted flow. Follow the steps in order. x402 only works through the 
 **If no key is found anywhere:**
 
 **Say:**
-> No Browser Use key found, so I'll set this up accountless: the wallet is your identity, and the first payment makes a project named after it.
+> No PagePilot key found, so I'll set this up accountless: the wallet is your identity, and the first payment makes a project named after it.
 
 **Do:** `MODE = A`. Go to Step 3.
 
 **If a key is found:**
 
-**Ask:** (header: `Account`) — question: `I found a Browser Use API key in <location>. Where should the USDC credits go?`
+**Ask:** (header: `Account`) — question: `I found a PagePilot API key in <location>. Where should the USDC credits go?`
 - **Top up that account** — Credits go to your existing API key's project. Good if your free credits ran out, or you'd rather pay with crypto than a card.
 - **Accountless wallet** — The wallet is a separate identity. The first payment makes a fresh project named after the wallet, apart from your existing account.
 
@@ -261,7 +261,7 @@ print(acct.total_credits_balance_usd)
 ```
 
 **Say:**
-> Done. Your Browser Use balance is now $<balance> (the test cost about $<cost>). Tasks draw from this, and the SDK adds another $5 when it runs out.
+> Done. Your PagePilot balance is now $<balance> (the test cost about $<cost>). Tasks draw from this, and the SDK adds another $5 when it runs out.
 
 ---
 
@@ -325,7 +325,7 @@ Both SDKs read `PAGEPILOT_X402_PRIVATE_KEY` from the env.
 ## Reference
 
 - x402 user docs: https://docs.pagepilot.com/cloud/guides/x402
-- Claude Code + Browser Use Cloud: https://docs.pagepilot.com/cloud/tutorials/integrations/claude-code
+- Claude Code + PagePilot Cloud: https://docs.pagepilot.com/cloud/tutorials/integrations/claude-code
 - x402 protocol: https://www.x402.org
 - USDC on Base contract: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
 - Base RPC: https://mainnet.base.org · Basescan: https://basescan.org

@@ -1,6 +1,6 @@
 # Skills Module
 
-The Skills module provides integration with the Browser Use API to fetch and execute skills.
+The Skills module provides integration with the PagePilot API to fetch and execute skills.
 
 ## Basic Usage
 

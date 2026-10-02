@@ -1,4 +1,4 @@
-# Browser Use LLMs
+# PagePilot LLMs
 
 We officially support the following LLMs:
 

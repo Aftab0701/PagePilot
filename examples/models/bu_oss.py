@@ -1,8 +1,8 @@
-"""Run the open-weights Browser Use model on your own GPU.
+"""Run the open-weights PagePilot model on your own GPU.
 
 `pagepilot/bu-30b-a3b-preview` is published under
 https://huggingface.co/pagepilot/bu-30b-a3b-preview. It is open weights you host
-yourself, not a model Browser Use Cloud serves for you, so it needs no
+yourself, not a model PagePilot Cloud serves for you, so it needs no
 PAGEPILOT_API_KEY and has no per-token price.
 
 Setup:

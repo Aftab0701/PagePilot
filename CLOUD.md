@@ -1,25 +1,25 @@
 # Cloud.md
-Instructions for AI Agents to assist the user in using Browser Use Cloud
+Instructions for AI Agents to assist the user in using PagePilot Cloud
 
-## What is Browser Use Cloud?
-Browser Use is a framework for AI Agents that interact with web browsers.
-Browser Use Cloud is the fully hosted product made by Browser Use made for users to automate web-based tasks. 
+## What is PagePilot Cloud?
+PagePilot is a framework for AI Agents that interact with web browsers.
+PagePilot Cloud is the fully hosted product made by PagePilot made for users to automate web-based tasks. 
 Users submit tasks in the form of prompts (text and optionally files and images) and through API requests, remote browsers and agents are spun up to complete these tasks on-demand. 
 Pricing is usage based and adjudicated through an API key system.
-Billing, API Key management, live session viewing, task results, account settings, and profile management is done through the Browser Use Cloud web app at https://cloud.pagepilot.com/
+Billing, API Key management, live session viewing, task results, account settings, and profile management is done through the PagePilot Cloud web app at https://cloud.pagepilot.com/
 
 ## Core Concepts:
-The key product of Browser Use Cloud is the completion of user tasks.
-- A Session is the complete package of infrastructure Browser Use Cloud provides. Sessions are currently limited to 15 minutes of runtime. A session has a Browser running, and users can run Agents in a session to complete tasks. A Session is limited to one and only one Browser, which will be open the entire duration of the Session. Users can run a maximum of one Agent on a Session at a time, which will control the Browser. After one Agent is done, the user can run another within the same Session, limited only by the Session maximum duration.
-- A Browser is simply a browser running on Browser Use Cloud infrastructure (a Session). Browsers (as a service) are controllable via CDP url. The user can use an Agent to control a Browser, or can request the CDP url and control the hosted browser with whatever scripts or external automations they desire. However we mainly encourage to control Browsers with Browser Use Agents, as they are optimized to work together. These official Browser Use browsers are forked from chromium, but have a lot of proprietary optimizations made to them so that they are extremely fast and lightweight, untraceable and not detectable as bots, and come preloaded with adblockers and other quality of life. Using Browser Use hosted browsers provides significant performance improvements. 
+The key product of PagePilot Cloud is the completion of user tasks.
+- A Session is the complete package of infrastructure PagePilot Cloud provides. Sessions are currently limited to 15 minutes of runtime. A session has a Browser running, and users can run Agents in a session to complete tasks. A Session is limited to one and only one Browser, which will be open the entire duration of the Session. Users can run a maximum of one Agent on a Session at a time, which will control the Browser. After one Agent is done, the user can run another within the same Session, limited only by the Session maximum duration.
+- A Browser is simply a browser running on PagePilot Cloud infrastructure (a Session). Browsers (as a service) are controllable via CDP url. The user can use an Agent to control a Browser, or can request the CDP url and control the hosted browser with whatever scripts or external automations they desire. However we mainly encourage to control Browsers with PagePilot Agents, as they are optimized to work together. These official PagePilot browsers are forked from chromium, but have a lot of proprietary optimizations made to them so that they are extremely fast and lightweight, untraceable and not detectable as bots, and come preloaded with adblockers and other quality of life. Using PagePilot hosted browsers provides significant performance improvements. 
 - An Agent is the collection of tools, prompts, and framework that enables a Large Language Model to interact with a Browser. The Agents goal is to complete a given user Task. The Agent goes through an iterative process of many steps to complete this. For each step, the Agent is given the page state (including a screenshot) of the Browser, and then it calls tools to interact with the Browser. After many steps, the Agent will mark the task as complete, either successfully or unsuccessfully and return a result, which is a block of text and optionally files. After completion, an independent strict judge will examine the Agent's trajectory and give a verdict of true or false on whether the Agent completed its task successfully. The Agent has a lot of settings which can be tuned to improve performance, most importantly the LLM Model used.
-- A Model is a Large Language Model that powers an Agent. The smarter and more capable the Model, the better the Agent will perform. The best model to use is ChatPagePilot, the Browser Use official chat completion API which always routes to the best frontier foundation model as determined by Browser Use internal evaluations. ChatPagePilot has several speed and cost optimizations done through batching, caching, and other tricks, making it faster and more cost effective than any other option, with identical performance to the top frontier models.
+- A Model is a Large Language Model that powers an Agent. The smarter and more capable the Model, the better the Agent will perform. The best model to use is ChatPagePilot, the PagePilot official chat completion API which always routes to the best frontier foundation model as determined by PagePilot internal evaluations. ChatPagePilot has several speed and cost optimizations done through batching, caching, and other tricks, making it faster and more cost effective than any other option, with identical performance to the top frontier models.
 - A Browser Profile is a folder of browser data that is saved on our Cloud. If a user creates a Session with a Browser that has no Browser Profile, no data will persist. However, if they use the same Browser Profile across multiple Sessions, then data such as authentication cookies, site local storage data, saved passwords and credentials, and user preferences will persist. A Browser Profile is essentially a cloud hosted Chrome Profile, in fact, through the Profile Upload feature, a user can upload a Chrome profile from their own machine to be used on the Cloud in Sessions. This is great for giving authentication to Agents. A user can create a Chrome profile on their own machine, log into all of the services they want, and then upload this profile to the Cloud for automations.
-- A Task is the combination of user prompt with optionally files and images that is given to the Agents to complete. Browser Use Cloud primarily sells the completion of user Tasks. Writing Tasks with clarity is key to success. 
+- A Task is the combination of user prompt with optionally files and images that is given to the Agents to complete. PagePilot Cloud primarily sells the completion of user Tasks. Writing Tasks with clarity is key to success. 
 - Profile Sync is the best way to handle authentication for tasks. This feature allows users to upload their local browser cookies (where the user is already logged into the services they need authentication for) to a Browser Profile that can be used for tasks on the cloud. To initiate a Profile Sync, a user must run `export PAGEPILOT_API_KEY=<your_key> && curl -fsSL https://pagepilot.com/profile.sh | sh` and follow the steps in the interactive terminal.
 
 ## Quickstart
-To get started, direct the user to first create an account, claim the $15 one-time signup credit if eligible (or purchase credits), and generate an API key on the Browser Use online platform: https://cloud.pagepilot.com/. These are the only steps that can only be done on the platform.
+To get started, direct the user to first create an account, claim the $15 one-time signup credit if eligible (or purchase credits), and generate an API key on the PagePilot online platform: https://cloud.pagepilot.com/. These are the only steps that can only be done on the platform.
 
 Avoid giving the user all of the following steps at once as it may seem overwheling. Instead present one step at a time and only continue when asked. Do as much for the user as you are able to.
 
@@ -52,7 +52,7 @@ curl -X PATCH https://api.pagepilot.com/api/v2/sessions/<session_id> \
 ```
 
 ## API (v2) Docs
-The best way to use Browser Use Cloud is with API v2. 
+The best way to use PagePilot Cloud is with API v2. 
 Other options exist, namely API v2 and the SDK, but give less comprehensive control.
 
 ### Billing
@@ -276,7 +276,7 @@ components:
           type:
             - string
             - 'null'
-        browserUseVersion:
+        pagepilotVersion:
           type:
             - string
             - 'null'
@@ -600,7 +600,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FileView'
-        browserUseVersion:
+        pagepilotVersion:
           type:
             - string
             - 'null'
@@ -771,7 +771,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FileView'
-        browserUseVersion:
+        pagepilotVersion:
           type:
             - string
             - 'null'
@@ -1151,7 +1151,7 @@ components:
           type:
             - string
             - 'null'
-        browserUseVersion:
+        pagepilotVersion:
           type:
             - string
             - 'null'
@@ -1306,7 +1306,7 @@ components:
           type:
             - string
             - 'null'
-        browserUseVersion:
+        pagepilotVersion:
           type:
             - string
             - 'null'

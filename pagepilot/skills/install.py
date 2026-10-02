@@ -66,7 +66,7 @@ def _browser_harness_executable() -> str | None:
 def _install_pagepilot_tool() -> None:
 	uv = shutil.which('uv')
 	if not uv:
-		raise RuntimeError('Installing the Browser Use skill requires `uv`. Install uv, then rerun `pagepilot skill install`.')
+		raise RuntimeError('Installing the PagePilot skill requires `uv`. Install uv, then rerun `pagepilot skill install`.')
 
 	result = subprocess.run([uv, 'tool', 'install', '--python', '3.12', '--upgrade', '--force', 'pagepilot'])
 	if result.returncode != 0:
@@ -91,7 +91,7 @@ def _load_skill_text_from_browser_harness_cli() -> str:
 def _build_parser() -> argparse.ArgumentParser:
 	parser = argparse.ArgumentParser(
 		prog='pagepilot skill',
-		description='Print or install the Browser Use skill.',
+		description='Print or install the PagePilot skill.',
 	)
 	subparsers = parser.add_subparsers(dest='command')
 
@@ -177,7 +177,7 @@ def handle(argv: list[str]) -> int:
 		for output_path in output_paths:
 			output_path.parent.mkdir(parents=True, exist_ok=True)
 			output_path.write_text(text, encoding='utf-8')
-			print(f'Installed Browser Use skill to {output_path}')
+			print(f'Installed PagePilot skill to {output_path}')
 		return 0
 
 	parser.print_help()

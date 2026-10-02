@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # Configuration
-REGISTRY="${DOCKER_REGISTRY:-browseruse}"
+REGISTRY="${DOCKER_REGISTRY:-pagepilot}"
 PLATFORMS="${PLATFORMS:-linux/amd64}"
 PUSH="${PUSH:-false}"
 
@@ -45,9 +45,9 @@ done
 
 # Create buildx builder if needed
 if [[ "$PLATFORMS" == *","* ]] || [ "$PUSH" = "true" ]; then
-    docker buildx inspect browseruse-builder >/dev/null 2>&1 || \
-        docker buildx create --name browseruse-builder --use
-    docker buildx use browseruse-builder
+    docker buildx inspect pagepilot-builder >/dev/null 2>&1 || \
+        docker buildx create --name pagepilot-builder --use
+    docker buildx use pagepilot-builder
 fi
 
 # Build images in order

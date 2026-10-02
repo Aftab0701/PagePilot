@@ -9,10 +9,10 @@ This directory contains the optimized Docker build system for pagepilot, achievi
 ./docker/build-base-images.sh
 
 # Build pagepilot
-docker build -f Dockerfile.fast -t browseruse .
+docker build -f Dockerfile.fast -t pagepilot .
 
 # Or use the standard Dockerfile (slower but self-contained)
-docker build -t browseruse .
+docker build -t pagepilot .
 ```
 
 ## Files

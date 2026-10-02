@@ -1,5 +1,5 @@
 """
-Telemetry for Browser Use.
+Telemetry for PagePilot.
 """
 
 from typing import TYPE_CHECKING

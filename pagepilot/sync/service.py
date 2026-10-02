@@ -1,5 +1,5 @@
 """
-Cloud sync service for sending events to the Browser Use cloud.
+Cloud sync service for sending events to the PagePilot cloud.
 """
 
 import logging
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class CloudSync:
-	"""Service for syncing events to the Browser Use cloud"""
+	"""Service for syncing events to the PagePilot cloud"""
 
 	def __init__(self, base_url: str | None = None, allow_session_events_for_auth: bool = False):
 		# Backend API URL for all API requests - can be passed directly or defaults to env var

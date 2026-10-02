@@ -1,12 +1,12 @@
 # Supported LLM Models
 
-Browser Use natively supports 15+ LLM providers. Most providers accept any model string — check each provider's docs to see which models are available.
+PagePilot natively supports 15+ LLM providers. Most providers accept any model string — check each provider's docs to see which models are available.
 
 ## Quick Reference
 
 | Provider | Class | Env Variable |
 |----------|-------|--------------|
-| Browser Use Cloud | `ChatPagePilot` | `PAGEPILOT_API_KEY` |
+| PagePilot Cloud | `ChatPagePilot` | `PAGEPILOT_API_KEY` |
 | OpenAI | `ChatOpenAI` | `OPENAI_API_KEY` |
 | Anthropic | `ChatAnthropic` | `ANTHROPIC_API_KEY` |
 | Google Gemini | `ChatGoogle` | `GOOGLE_API_KEY` |
@@ -26,14 +26,14 @@ Browser Use natively supports 15+ LLM providers. Most providers accept any model
 
 Based on our [benchmark of real-world browser tasks](https://pagepilot.com/posts/what-model-to-use):
 
-- **Maximum performance**: Browser Use Cloud `bu-ultra` — 78% accuracy, ~14 tasks/hour
+- **Maximum performance**: PagePilot Cloud `bu-ultra` — 78% accuracy, ~14 tasks/hour
 - **Best open-source + cloud LLM**: `ChatPagePilot(model='bu-2-0')` — 63.3% accuracy, outperforms every standalone frontier model
 - **Best standalone model**: `claude-opus-4-6` — 62% accuracy, excels at custom JavaScript and structured data extraction
 - **Best value**: `claude-sonnet-4-6` — 59% accuracy, near-opus quality at lower cost
 - **Fast + capable**: `gemini-3-1-pro` — 59.3% accuracy
 
 ## Table of Contents
-- [Browser Use Cloud (Recommended)](#pagepilot-cloud)
+- [PagePilot Cloud (Recommended)](#pagepilot-cloud)
 - [OpenAI](#openai)
 - [Anthropic](#anthropic)
 - [Google Gemini](#google-gemini)
@@ -52,7 +52,7 @@ Based on our [benchmark of real-world browser tasks](https://pagepilot.com/posts
 
 ---
 
-## Browser Use Cloud
+## PagePilot Cloud
 
 Optimized for browser automation — highest accuracy, fastest speed, lowest token cost.
 
@@ -75,7 +75,7 @@ llm = ChatPagePilot(model='bu-2-0-mini-preview')   # Cheaper per token, opt-in w
 ### Open weights (self-hosted)
 
 `bu-30b-a3b-preview` is our open-weights browser model: 30B total, 3B active, 64K context.
-Browser Use Cloud does not route it, so there is no `bu-*` alias and no per-token price.
+PagePilot Cloud does not route it, so there is no `bu-*` alias and no per-token price.
 Run it yourself and talk to it with `ChatOpenAI`:
 
 ```bash

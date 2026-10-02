@@ -83,7 +83,7 @@ class DiscordBot(commands.Bot):
 				if self.ack:
 					try:
 						await message.reply(
-							'Starting browser use task...',
+							'Starting pagepilot task...',
 							mention_author=True,  # Don't ping the user
 						)
 					except Exception as e:
@@ -120,4 +120,4 @@ class DiscordBot(commands.Bot):
 			return agent_message
 
 		except Exception as e:
-			raise Exception(f'Browser-use task failed: {str(e)}')
+			raise Exception(f'PagePilot task failed: {str(e)}')

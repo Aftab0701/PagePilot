@@ -23,7 +23,7 @@ async def main():
 			headless=False,
 			traces_dir='./tmp/result_processing',
 			window_size=ViewportSize(width=1280, height=1000),
-			user_data_dir='~/.config/browseruse/profiles/default',
+			user_data_dir='~/.config/pagepilot/profiles/default',
 		)
 	)
 	await browser_session.start()

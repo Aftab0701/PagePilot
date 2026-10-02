@@ -1,4 +1,4 @@
-# Browser Use Cloud API V4
+# PagePilot Cloud API V4
 
 Run one browser task through the current Cloud API. The example creates a run, polls the lightweight status endpoint, and fetches the result once the run is terminal. It cancels a run that exceeds the configurable 15-minute wait limit.
 

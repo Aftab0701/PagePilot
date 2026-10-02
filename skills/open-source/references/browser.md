@@ -19,7 +19,7 @@ browser = Browser(
     window_size={'width': 1000, 'height': 700},
 )
 
-agent = Agent(task='Search for Browser Use', browser=browser, llm=ChatPagePilot())
+agent = Agent(task='Search for PagePilot', browser=browser, llm=ChatPagePilot())
 await agent.run()
 ```
 

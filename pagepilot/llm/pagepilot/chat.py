@@ -62,7 +62,7 @@ class ChatPagePilot(BaseChatModel):
 				- 'bu-2-0-mini-preview': Cheaper and faster per token, opt-in while in preview
 				- 'bu-1-0': Previous generation model, redirected to bu-2-0 at the gateway
 				- 'bu-qa-1': Website QA model (tests a site and scores functionality/aesthetics)
-				- 'pagepilot/bu-30b-a3b-preview': open weights, self-hosted only. Browser Use
+				- 'pagepilot/bu-30b-a3b-preview': open weights, self-hosted only. PagePilot
 				  Cloud does not serve it; run it yourself with vLLM and point `ChatOpenAI` at
 				  your own endpoint. See examples/models/bu_oss.py.
 				- Provider-prefixed ids resolved by the gateway, e.g. 'anthropic/claude-sonnet-4-6',
@@ -293,7 +293,7 @@ class ChatPagePilot(BaseChatModel):
 			)
 		elif status_code == 402:
 			raise ModelProviderError(
-				message=f'Browser Use credits exhausted. Add more at:\nhttps://cloud.pagepilot.com/billing?utm_source=oss&utm_medium=chat_pagepilot\n{error_detail}',
+				message=f'PagePilot credits exhausted. Add more at:\nhttps://cloud.pagepilot.com/billing?utm_source=oss&utm_medium=chat_pagepilot\n{error_detail}',
 				status_code=402,
 				model=self.name,
 			)

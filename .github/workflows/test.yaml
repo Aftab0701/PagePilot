@@ -153,10 +153,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.config/browseruse/extensions
-          key: ${{ runner.os }}-browseruse-extensions-${{ hashFiles('pagepilot/browser/profile.py') }}
+            ~/.config/pagepilot/extensions
+          key: ${{ runner.os }}-pagepilot-extensions-${{ hashFiles('pagepilot/browser/profile.py') }}
           restore-keys: |
-            ${{ runner.os }}-browseruse-extensions-
+            ${{ runner.os }}-pagepilot-extensions-
 
       - name: Check if test file exists
         id: check-file
@@ -237,10 +237,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.config/browseruse/extensions
-          key: ${{ runner.os }}-browseruse-extensions-${{ hashFiles('pagepilot/browser/profile.py') }}
+            ~/.config/pagepilot/extensions
+          key: ${{ runner.os }}-pagepilot-extensions-${{ hashFiles('pagepilot/browser/profile.py') }}
           restore-keys: |
-            ${{ runner.os }}-browseruse-extensions-
+            ${{ runner.os }}-pagepilot-extensions-
 
       - name: Run agent tasks evaluation and capture score
         id: eval

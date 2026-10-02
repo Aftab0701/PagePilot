@@ -1,4 +1,4 @@
-"""Video Recording Service for Browser Use Sessions."""
+"""Video Recording Service for PagePilot Sessions."""
 
 import base64
 import io

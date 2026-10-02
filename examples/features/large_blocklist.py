@@ -76,7 +76,7 @@ async def main():
 		browser_profile=BrowserProfile(
 			prohibited_domains=prohibited_domains,
 			headless=False,
-			user_data_dir='~/.config/browseruse/profiles/blocklist-demo',
+			user_data_dir='~/.config/pagepilot/profiles/blocklist-demo',
 		),
 	)
 

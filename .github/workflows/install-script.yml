@@ -1,4 +1,4 @@
-name: Test Browser Use CLI Install
+name: Test PagePilot CLI Install
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check generated Browser Use skill
+      - name: Check generated PagePilot skill
         run: python3 scripts/sync_browser_harness_skill.py --check
 
   test-pip-install:
@@ -69,7 +69,7 @@ jobs:
           echo "$PWD/.venv/bin" >> $GITHUB_PATH
           echo "$PWD/.venv/Scripts" >> $GITHUB_PATH
 
-      - name: Verify Browser Use CLI
+      - name: Verify PagePilot CLI
         run: |
           pagepilot --help
           pagepilot auth --help
@@ -77,7 +77,7 @@ jobs:
 
       - name: Verify aliases
         run: |
-          browseruse --help
+          pilot --help
           bu --help
           browser --help
 
@@ -100,7 +100,7 @@ jobs:
           uv pip install build
           python -m build --wheel
 
-      - name: Verify uvx Browser Use CLI
+      - name: Verify uvx PagePilot CLI
         run: |
           WHEEL=$(ls dist/*.whl)
           uvx --from "$WHEEL" pagepilot --help
@@ -118,7 +118,7 @@ jobs:
       - name: Add uv to PATH
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Verify uvx Browser Use CLI
+      - name: Verify uvx PagePilot CLI
         run: |
           uvx "pagepilot[cli]" --help
           uvx "pagepilot[cli]" auth --help

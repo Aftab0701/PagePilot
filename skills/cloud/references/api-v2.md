@@ -307,7 +307,7 @@ Response includes: `{ items: [...], totalItems, pageNumber, pageSize }`
 
 ## Response Schemas
 
-**TaskItemView:** id, sessionId, llm, task, status, startedAt, finishedAt?, metadata?, output?, browserUseVersion?, isSuccess?
+**TaskItemView:** id, sessionId, llm, task, status, startedAt, finishedAt?, metadata?, output?, pagepilotVersion?, isSuccess?
 
 **TaskView:** extends TaskItemView + steps: TaskStepView[], outputFiles: FileView[]
 

@@ -21,7 +21,7 @@ uvx pagepilot install     # Downloads Chromium
 ## Environment Variables
 
 ```bash
-# Browser Use (recommended) — https://cloud.pagepilot.com/new-api-key
+# PagePilot (recommended) — https://cloud.pagepilot.com/new-api-key
 PAGEPILOT_API_KEY=
 
 # Google — https://aistudio.google.com/app/u/1/apikey

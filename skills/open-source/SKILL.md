@@ -14,7 +14,7 @@ description: >
 allowed-tools: Read
 ---
 
-# Browser Use Open-Source Library Reference
+# PagePilot Open-Source Library Reference
 
 Reference docs for writing Python code against the pagepilot library.
 Read the relevant file based on what the user needs.

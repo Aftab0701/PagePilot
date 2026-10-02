@@ -67,7 +67,7 @@ class SlackBot:
 				if self.ack:
 					try:
 						await self.send_message(
-							event['channel'], f'<@{user_id}> Starting browser use task...', thread_ts=event.get('ts')
+							event['channel'], f'<@{user_id}> Starting pagepilot task...', thread_ts=event.get('ts')
 						)
 					except Exception as e:
 						logger.error(f'Error sending start message: {e}')

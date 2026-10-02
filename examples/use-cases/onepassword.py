@@ -11,7 +11,7 @@ Use Case: Securely log into a website using credentials stored in 1Password vaul
 - Use blur_page and unblur_page actions to visually obscure sensitive information on the page while filling in credentials for extra security.
 
 **SETUP**
-How to setup 1Password with Browser Use
+How to setup 1Password with PagePilot
 - Get Individual Plan for 1Password
 - Go to the Home page and click “New Vault”
     - Add the credentials you need for any websites you want to log into
@@ -28,7 +28,7 @@ async def main():
 	token = os.getenv('OP_SERVICE_ACCOUNT_TOKEN')
 
 	# Authenticate with 1Password
-	op_client = await Client.authenticate(auth=token, integration_name='Browser Use Secure Login', integration_version='v1.0.0')
+	op_client = await Client.authenticate(auth=token, integration_name='PagePilot Secure Login', integration_version='v1.0.0')
 
 	# Initialize tools
 	tools = Tools()

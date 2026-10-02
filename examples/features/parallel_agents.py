@@ -18,7 +18,7 @@ browser_session = BrowserSession(
 		keep_alive=True,
 		headless=False,
 		record_video_dir=Path('./tmp/recordings'),
-		user_data_dir='~/.config/browseruse/profiles/default',
+		user_data_dir='~/.config/pagepilot/profiles/default',
 	)
 )
 llm = ChatOpenAI(model='gpt-4.1-mini')

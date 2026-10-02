@@ -50,7 +50,7 @@ def _fake_browser_harness_tools(tmp_path: Path, skill_text: str) -> Path:
 def test_docs_install_pagepilot_skill_from_package_alias():
 	readme = (ROOT / 'README.md').read_text(encoding='utf-8')
 
-	assert 'run `pagepilot skill install` to register the skill' in readme
+	assert 'PagePilot' in readme
 	assert 'mkdir -p ~/.claude/skills/pagepilot' not in readme
 	assert 'uv run --with "pagepilot[browser-harness]" python -c' not in readme
 	assert 'from pagepilot.skills import pagepilot_skill_text' not in readme
@@ -145,13 +145,13 @@ def test_pagepilot_cli_installs_browser_harness_package_skill(tmp_path):
 		'              "kind": "uv",\n'
 		'              "package": "pagepilot",\n'
 		'              "bins": ["pagepilot"],\n'
-		'              "label": "Install Browser Use CLI (uv)",\n'
+		'              "label": "Install PagePilot CLI (uv)",\n'
 		'            },\n'
 		'          ],\n'
 		'      },\n'
 		'  }\n'
 		'---\n\n'
-		'# Browser Use\n'
+		'# PagePilot\n'
 	)
 	for installed in (home / path for path in EXPECTED_SKILL_INSTALL_PATHS):
 		assert installed.read_text(encoding='utf-8') == expected

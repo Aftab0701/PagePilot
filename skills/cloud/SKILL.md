@@ -1,7 +1,7 @@
 ---
 name: cloud
 description: >
-  Documentation reference for using Browser Use Cloud — the hosted API
+  Documentation reference for using PagePilot Cloud — the hosted API
   and SDK for browser automation. Use this skill whenever the user needs
   help with the Cloud REST API (v2, v3, or v4), pagepilot-sdk (Python or
   TypeScript), X-PagePilot-API-Key authentication, cloud sessions,
@@ -16,7 +16,7 @@ description: >
 allowed-tools: Read
 ---
 
-# Browser Use Cloud Reference
+# PagePilot Cloud Reference
 
 Reference docs for the Cloud REST API, SDKs, and integration patterns.
 Read the relevant file based on what the user needs.

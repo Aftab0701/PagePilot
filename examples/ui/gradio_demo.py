@@ -79,8 +79,8 @@ async def run_browser_task(
 
 
 def create_ui():
-	with gr.Blocks(title='Browser Use GUI') as interface:
-		gr.Markdown('# Browser Use Task Automation')
+	with gr.Blocks(title='PagePilot GUI') as interface:
+		gr.Markdown('# PagePilot Task Automation')
 
 		with gr.Row():
 			with gr.Column():

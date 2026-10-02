@@ -1,4 +1,4 @@
-"""Browser Use skill alias for Browser Harness"""
+"""PagePilot skill alias for Browser Harness"""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import re
 from importlib import resources
 from pathlib import Path
 
-# Browser Use-only frontmatter added while generating both checked-in SKILL.md copies.
+# PagePilot-only frontmatter added while generating both checked-in SKILL.md copies.
 # Keep this as the source of truth; scripts/sync_browser_harness_skill.py verifies the outputs.
 OPENCLAW_METADATA_LINES = (
 	'metadata:',
@@ -21,7 +21,7 @@ OPENCLAW_METADATA_LINES = (
 	'              "kind": "uv",',
 	'              "package": "pagepilot",',
 	'              "bins": ["pagepilot"],',
-	'              "label": "Install Browser Use CLI (uv)",',
+	'              "label": "Install PagePilot CLI (uv)",',
 	'            },',
 	'          ],',
 	'      },',
@@ -30,7 +30,7 @@ OPENCLAW_METADATA_LINES = (
 
 
 def as_pagepilot_skill(text: str) -> str:
-	"""Expose the Browser Harness skill under the Browser Use skill identity."""
+	"""Expose the Browser Harness skill under the PagePilot skill identity."""
 	if not text.startswith('---\n'):
 		return text
 
@@ -66,16 +66,16 @@ def as_pagepilot_skill(text: str) -> str:
 	if not any(line.startswith('metadata:') for line in lines):
 		lines.extend(OPENCLAW_METADATA_LINES)
 
-	body = body.replace('# browser-harness', '# Browser Use', 1).replace('# Browser Harness', '# Browser Use', 1)
+	body = body.replace('# browser-harness', '# PagePilot', 1).replace('# Browser Harness', '# PagePilot', 1)
 	# Rebrand every mention except repo URLs (github.com/pagepilot/browser-harness/...)
 	body = re.sub(r'(?<!/)browser-harness', 'pagepilot', body)
-	body = body.replace('Browser Harness', 'Browser Use')
+	body = body.replace('Browser Harness', 'PagePilot')
 	frontmatter_text = '\n'.join(lines)
 	return f'---\n{frontmatter_text}\n---\n{body}'
 
 
 def skill_text() -> str:
-	"""Return the canonical Browser Use skill."""
+	"""Return the canonical PagePilot skill."""
 	skill_path = Path(__file__).resolve().parent / 'pagepilot' / 'SKILL.md'
 	if skill_path.exists():
 		return skill_path.read_text(encoding='utf-8')
@@ -84,6 +84,6 @@ def skill_text() -> str:
 		text = resources.files('browser_harness').joinpath('SKILL.md').read_text(encoding='utf-8')
 	except ModuleNotFoundError as exc:
 		raise RuntimeError(
-			'The Browser Use skill relies on the browser-harness package. Install pagepilot again or install `browser-harness`.'
+			'The PagePilot skill relies on the browser-harness package. Install pagepilot again or install `browser-harness`.'
 		) from exc
 	return as_pagepilot_skill(text)

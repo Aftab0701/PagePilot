@@ -24,7 +24,7 @@ def _to_pagepilot_skill(text: str) -> str:
 	module_path = ROOT / 'pagepilot' / 'skills' / 'pagepilot.py'
 	spec = importlib.util.spec_from_file_location('pagepilot_skill_rewriter', module_path)
 	if spec is None or spec.loader is None:
-		raise RuntimeError(f'Could not load Browser Use skill rewriter from {module_path}')
+		raise RuntimeError(f'Could not load PagePilot skill rewriter from {module_path}')
 	module = importlib.util.module_from_spec(spec)
 	spec.loader.exec_module(module)
 
@@ -32,13 +32,13 @@ def _to_pagepilot_skill(text: str) -> str:
 
 
 def _build_parser() -> argparse.ArgumentParser:
-	parser = argparse.ArgumentParser(description='Sync the Browser Use skill from browser-harness/SKILL.md.')
+	parser = argparse.ArgumentParser(description='Sync the PagePilot skill from browser-harness/SKILL.md.')
 	parser.add_argument('--source', default=DEFAULT_SOURCE_URL, help='Source SKILL.md path or URL.')
 	parser.add_argument(
 		'--output',
 		type=Path,
 		action='append',
-		help='Output Browser Use SKILL.md path. May be passed more than once. Defaults to repo and package copies.',
+		help='Output PagePilot SKILL.md path. May be passed more than once. Defaults to repo and package copies.',
 	)
 	parser.add_argument('--check', action='store_true', help='Fail if the output file is stale.')
 	return parser

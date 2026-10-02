@@ -1,4 +1,4 @@
-"""Beta Browser Use integration."""
+"""Beta PagePilot integration."""
 
 from __future__ import annotations
 

@@ -103,7 +103,7 @@ async def get_openrouter_model_metadata(model_name: str, refresh: bool = False) 
 
 
 def model_pricing_from_openrouter_metadata(model_name: str, metadata: dict[str, Any]) -> ModelPricing | None:
-	"""Convert one OpenRouter model metadata object into Browser Use pricing."""
+	"""Convert one OpenRouter model metadata object into PagePilot pricing."""
 	pricing = metadata.get('pricing')
 	if not isinstance(pricing, dict):
 		return None

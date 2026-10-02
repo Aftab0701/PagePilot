@@ -26,7 +26,7 @@ async def run_search():
 	agent = Agent(
 		task=(
 			'1. Go to https://www.reddit.com/r/LocalLLaMA '
-			"2. Search for 'browser use' in the search bar"
+			"2. Search for 'pagepilot' in the search bar"
 			'3. Click on first result'
 			'4. Return the first comment'
 		),

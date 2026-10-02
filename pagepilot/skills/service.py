@@ -1,10 +1,13 @@
-"""Skills service for fetching and executing skills from the Browser Use API"""
+"""Skills service for fetching and executing skills from the PagePilot API"""
 
 import logging
 import os
 from typing import Any, Literal
 
-from pagepilot_sdk import AsyncPagePilot, ExecuteSkillResponse, SkillListResponse
+try:
+	from pagepilot_sdk import AsyncPagePilot, ExecuteSkillResponse, SkillListResponse
+except ImportError:
+	from browser_use_sdk import AsyncBrowserUse as AsyncPagePilot, ExecuteSkillResponse, SkillListResponse
 from cdp_use.cdp.network import Cookie
 from pydantic import BaseModel, ValidationError
 
@@ -17,14 +20,14 @@ logger = logging.getLogger(__name__)
 
 
 class SkillService:
-	"""Service for managing and executing skills from the Browser Use API"""
+	"""Service for managing and executing skills from the PagePilot API"""
 
 	def __init__(self, skill_ids: list[str | Literal['*']], api_key: str | None = None):
 		"""Initialize the skills service
 
 		Args:
 			skill_ids: List of skill IDs to fetch and cache, or ['*'] to fetch all available skills
-			api_key: Browser Use API key (optional, will use env var if not provided)
+			api_key: PagePilot API key (optional, will use env var if not provided)
 		"""
 		self.skill_ids = skill_ids
 		self.api_key = api_key or os.getenv('PAGEPILOT_API_KEY') or ''
@@ -51,7 +54,7 @@ class SkillService:
 
 		try:
 			# Fetch skills from API
-			logger.info('Fetching skills from Browser Use API...')
+			logger.info('Fetching skills from PagePilot API...')
 			use_wildcard = '*' in self.skill_ids
 			page_size = 100
 			requested_ids: set[str] = set() if use_wildcard else {s for s in self.skill_ids if s != '*'}

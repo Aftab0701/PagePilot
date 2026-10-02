@@ -269,7 +269,7 @@ Style: Modern TikTok advertisement, viral potential, authentic energy, minimal t
 		analysis_path = self.output_dir / f'analysis_{timestamp}.txt'
 		async with aiofiles.open(analysis_path, 'w', encoding='utf-8') as f:
 			await f.write(f'URL: {url}\n\n')
-			await f.write('BROWSER-USE ANALYSIS:\n')
+			await f.write('PAGEPILOT ANALYSIS:\n')
 			await f.write(analysis)
 			await f.write('\n\nGENERATED PROMPT:\n')
 			await f.write(prompt)

@@ -1,4 +1,4 @@
-"""Run the Browser Use CLI with ``python -m pagepilot``."""
+"""Run the PagePilot CLI with ``python -m pagepilot``."""
 
 import sys
 

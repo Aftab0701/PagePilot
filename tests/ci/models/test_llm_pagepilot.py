@@ -11,8 +11,8 @@ from tests.ci.models.model_test_helper import run_model_button_click_test
 TEST_API_KEY = 'test-key-not-real'
 
 
-async def test_browseruse_bu_latest(httpserver):
-	"""Test Browser Use bu-latest can click a button."""
+async def test_pagepilot_bu_latest(httpserver):
+	"""Test PagePilot bu-latest can click a button."""
 	await run_model_button_click_test(
 		model_class=ChatPagePilot,
 		model_name='bu-latest',

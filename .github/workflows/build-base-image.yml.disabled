@@ -37,7 +37,7 @@ jobs:
           platforms: ${{ matrix.platform }}
           push: true
           tags: |
-            browseruse/browseruse-base:chromium-138-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }}
-            browseruse/browseruse-base:latest-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }}
-          cache-from: type=registry,ref=browseruse/browseruse-base:buildcache-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }}
-          cache-to: type=registry,ref=browseruse/browseruse-base:buildcache-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }},mode=max
+            pagepilot/pagepilot-base:chromium-138-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }}
+            pagepilot/pagepilot-base:latest-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }}
+          cache-from: type=registry,ref=pagepilot/pagepilot-base:buildcache-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }}
+          cache-to: type=registry,ref=pagepilot/pagepilot-base:buildcache-${{ matrix.platform == 'linux/amd64' && 'amd64' || 'arm64' }},mode=max

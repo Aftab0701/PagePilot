@@ -22,7 +22,7 @@ browser_session = BrowserSession(
 	browser_profile=BrowserProfile(
 		executable_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 		allowed_domains=allowed_domains,
-		user_data_dir='~/.config/browseruse/profiles/default',
+		user_data_dir='~/.config/pagepilot/profiles/default',
 	),
 )
 

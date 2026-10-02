@@ -1,5 +1,5 @@
 """
-Point ChatPagePilot at provider-prefixed models via the Browser Use gateway.
+Point ChatPagePilot at provider-prefixed models via the PagePilot gateway.
 
 `ChatPagePilot` isn't limited to the `bu-*` models - it also accepts
 provider-prefixed ids:

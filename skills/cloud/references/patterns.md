@@ -143,7 +143,7 @@ print(result.output)  # Company instance
 
 **Tips:**
 - Keep schemas flat — nesting adds complexity
-- Typical task: 8-12 steps with Browser Use 2.0
+- Typical task: 8-12 steps with PagePilot 2.0
 
 ---
 
